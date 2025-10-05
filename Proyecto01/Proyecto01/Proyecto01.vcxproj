@@ -19,7 +19,27 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CabinaPeaje.cpp" />
+    <ClCompile Include="Carril.cpp" />
+    <ClCompile Include="Carro.cpp" />
+    <ClCompile Include="Estadisticas.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Simulador.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="carroAmarillo.png" />
+    <Image Include="carroAzul.png" />
+    <Image Include="carroRojo.png" />
+    <Image Include="carroVerde.png" />
+    <Image Include="casa.png" />
+    <Image Include="edificio.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CabinaPeaje.h" />
+    <ClInclude Include="Carril.h" />
+    <ClInclude Include="Carro.h" />
+    <ClInclude Include="Estadisticas.h" />
+    <ClInclude Include="Simulador.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

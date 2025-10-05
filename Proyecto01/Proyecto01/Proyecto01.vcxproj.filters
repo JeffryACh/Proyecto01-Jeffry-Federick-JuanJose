@@ -13,10 +13,77 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Archivos de recursos\Carros">
+      <UniqueIdentifier>{d72e18da-2e1b-4dcb-9219-2aa12d1bbb6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de recursos\Peaje">
+      <UniqueIdentifier>{d425eb10-f26d-4015-85a9-3a6353c43321}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de recursos\Fondo">
+      <UniqueIdentifier>{43f7e879-521a-4724-a330-83b670d1fd80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Clases">
+      <UniqueIdentifier>{9c611c48-cb05-482d-bc1c-773bcedcbe0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Clases">
+      <UniqueIdentifier>{58a2fc54-4f85-4c8c-97fe-b4d6c670686b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="Carro.cpp">
+      <Filter>Archivos de origen\Clases</Filter>
+    </ClCompile>
+    <ClCompile Include="Carril.cpp">
+      <Filter>Archivos de origen\Clases</Filter>
+    </ClCompile>
+    <ClCompile Include="CabinaPeaje.cpp">
+      <Filter>Archivos de origen\Clases</Filter>
+    </ClCompile>
+    <ClCompile Include="Simulador.cpp">
+      <Filter>Archivos de origen\Clases</Filter>
+    </ClCompile>
+    <ClCompile Include="Estadisticas.cpp">
+      <Filter>Archivos de origen\Clases</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="carroAmarillo.png">
+      <Filter>Archivos de recursos\Carros</Filter>
+    </Image>
+    <Image Include="carroAzul.png">
+      <Filter>Archivos de recursos\Carros</Filter>
+    </Image>
+    <Image Include="carroRojo.png">
+      <Filter>Archivos de recursos\Carros</Filter>
+    </Image>
+    <Image Include="carroVerde.png">
+      <Filter>Archivos de recursos\Carros</Filter>
+    </Image>
+    <Image Include="casa.png">
+      <Filter>Archivos de recursos\Fondo</Filter>
+    </Image>
+    <Image Include="edificio.png">
+      <Filter>Archivos de recursos\Fondo</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Carro.h">
+      <Filter>Archivos de encabezado\Clases</Filter>
+    </ClInclude>
+    <ClInclude Include="CabinaPeaje.h">
+      <Filter>Archivos de encabezado\Clases</Filter>
+    </ClInclude>
+    <ClInclude Include="Carril.h">
+      <Filter>Archivos de encabezado\Clases</Filter>
+    </ClInclude>
+    <ClInclude Include="Estadisticas.h">
+      <Filter>Archivos de encabezado\Clases</Filter>
+    </ClInclude>
+    <ClInclude Include="Simulador.h">
+      <Filter>Archivos de encabezado\Clases</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
