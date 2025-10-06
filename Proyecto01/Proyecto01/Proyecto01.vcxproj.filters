@@ -68,6 +68,9 @@
     <Image Include="edificio.png">
       <Filter>Archivos de recursos\Fondo</Filter>
     </Image>
+    <Image Include="Fondo.jpg">
+      <Filter>Archivos de recursos\Fondo</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Carro.h">

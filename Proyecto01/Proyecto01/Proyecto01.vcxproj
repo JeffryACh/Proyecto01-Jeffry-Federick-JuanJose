@@ -33,6 +33,7 @@
     <Image Include="carroVerde.png" />
     <Image Include="casa.png" />
     <Image Include="edificio.png" />
+    <Image Include="Fondo.jpg" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CabinaPeaje.h" />
