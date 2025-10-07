@@ -30,5 +30,18 @@ public:
 		cantidadCarrosAtendidos = 0;
 	}
 
+	// Getters
+	float getTiempoAtencion() { return tiempoAtencion; }
+	NodoColaCarros* getFrente() { return frente; }
+	NodoColaCarros* getFin() { return fin; }
+	int getCantidadCarrosAtendidos() { return cantidadCarrosAtendidos; }
+
+	// Setters
+	void setTiempoAtencion(float pTiempoAtencion) { tiempoAtencion = pTiempoAtencion; }
+	void setFrente(NodoColaCarros* pFrente) { frente = pFrente; }
+	void setFin(NodoColaCarros* pFin) { fin = pFin; }
+	void setCantidadCarrosAtendidos(int pCantidadCarrosAtendidos) { cantidadCarrosAtendidos = pCantidadCarrosAtendidos; }
+
+	// Métodos
 	void procesarCarro(Carro* pCarro);
 }

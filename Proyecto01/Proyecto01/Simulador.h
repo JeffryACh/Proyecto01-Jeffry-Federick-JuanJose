@@ -16,6 +16,15 @@ private:
 	CabinaPeaje cabinas[CANTIDAD_CABINAS]; // Array de cabinas de peaje
 public:
 	Simulador();
+
+	// Getters
+	vector<Carril> getCarriles() { return carriles; }
+	CabinaPeaje* getCabinas() { return cabinas; }
+
+	// Setters
+	void setCarriles(vector<Carril> pCarriles) { carriles = pCarriles; }
+	void setCabinas(CabinaPeaje pCabinas[CANTIDAD_CABINAS]) { for (int i = 0; i < CANTIDAD_CABINAS; i++) cabinas[i] = pCabinas[i]; }
+
 	void iniciar();
 	void actualizar(float pTiempo);
 	void detener();

@@ -39,6 +39,23 @@ public:
 		tiempo = 0.0;
 	}
 
+	// Getters
+	bool getEstado() { return estado; }
+	Color getColor() { return color; }
+	string getPlaca() { return placa; }
+	float getVelocidad() { return velocidad; }
+	float getPosicion() { return posicion; }
+	float getTiempo() { return tiempo; }
+
+	// Setters
+	void setEstado(bool pEstado) { estado = pEstado; }
+	void setColor(Color pColor) { color = pColor; }
+	void setPlaca(string pPlaca) { placa = pPlaca; }
+	void setVelocidad(float pVelocidad) { velocidad = pVelocidad; }
+	void setPosicion(float pPosicion) { posicion = pPosicion; }
+	void setTiempo(float pTiempo) { tiempo = pTiempo; }
+
+	// Métodos
 	void decidirCabina();
 	void avanzar(float pVelocidad, float pTiempo, float pPosicion);
 }
