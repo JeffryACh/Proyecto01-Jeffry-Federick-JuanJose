@@ -28,4 +28,4 @@ public:
 	void iniciar();
 	void actualizar(float pTiempo);
 	void detener();
-}
+};

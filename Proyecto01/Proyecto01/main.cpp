@@ -1,11 +1,12 @@
 /*
+* Proyecto 01: Simulador de Flujo de Tráfico y Peaje
 * @Authors:
 *   - Jeffry Araya Ch.
 *   - Federick Fernandez C.
 *   - Juan J. Rojas
 *
 * Created: 28/09/2025 15:40
-* Modified: 10/10/2025 14:05
+* Modified: 10/10/2025 16:20
 */
 
 #include <iostream>
@@ -25,10 +26,10 @@ const float FPS = 60.0;
 
 struct Auto {
     ALLEGRO_BITMAP* img;
-    float x, y;
+	float x, y; // posición
     float velocidad;
     bool vertical; 
-    float w, h;    
+	float w, h; // ancho y alto
     int tipo;      // color
 };
 

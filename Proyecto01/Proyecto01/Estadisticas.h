@@ -9,4 +9,4 @@ public:
 	void registrarEventos(Simulador& pSimulador);
 	void generarCSV(const string& pNombreArchivo);
 	void caldularMetricas();
-}
+};

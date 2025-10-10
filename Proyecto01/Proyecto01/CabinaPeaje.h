@@ -13,7 +13,7 @@ typedef struct ColaCarros
 	ColaCarros* siguiente;
 } NodoColaCarros;
 
-class CabinaPeaje 
+class CabinaPeaje
 {
 private:
 	float tiempoAtencion; // tiempo en horas que tarda en atender un carro
@@ -44,4 +44,4 @@ public:
 
 	// Métodos
 	void procesarCarro(Carro* pCarro);
-}
+};
