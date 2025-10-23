@@ -16,6 +16,8 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 
+#include "Carro.h"
+
 using namespace std;
 
 const int SCREEN_W = 1200;
@@ -23,7 +25,7 @@ const int SCREEN_H = 600;
 const float FPS = 60.0;
 
 
-
+/*
 struct Auto {
     ALLEGRO_BITMAP* img;
 	float x, y; // posición
@@ -32,6 +34,8 @@ struct Auto {
 	float w, h; // ancho y alto
     int tipo;      // color
 };
+*/
+
 
 /*
 TO DO:-------------------------------------------------
@@ -41,6 +45,7 @@ hay q hacer:
 -implementar colisiones
 -Poner peaje
 -carro verde (cambiar tamaño)
+-carro amarillo (cambiar tamaño)
 
 */
 
@@ -52,31 +57,18 @@ void dibujarFondo(ALLEGRO_BITMAP* fondo) {
         0
     );
 }
-
-void dibujarAutos(vector<Auto>& autos) {
+// #TODO: Pasar esta función a la clase Carro
+void dibujarAutos(vector<Carro>& autos) {
     for (auto& a : autos) {
-        if (a.vertical) {
-            // Aqui es si va bajando
-            float bw = al_get_bitmap_width(a.img);
-            float bh = al_get_bitmap_height(a.img);
-            float cx = bw / 2.0f;
-            float cy = bh / 2.0f;
-            float xscale = a.w / bw;
-            float yscale = a.h / bh;
-            al_draw_scaled_rotated_bitmap(a.img, cx, cy,
-                a.x + a.w / 2.0f, a.y + a.h / 2.0f,
-                xscale, yscale, ALLEGRO_PI / 2.0f, 0);
-        }
-        else {
-            al_draw_scaled_bitmap(a.img, 0, 0, al_get_bitmap_width(a.img), al_get_bitmap_height(a.img),
-                a.x, a.y, a.w, a.h, 0);
-        }
+		a.dibujar();
+        
     }
 }
 
 
 
 int main() {
+
     if (!al_init()) {
         cerr << "No se pudo inicializar Allegro culpa de Rodirgo chavez" << endl;
         return 1;
@@ -119,37 +111,34 @@ int main() {
         return 1;
     }
 
-    vector<Auto> autos;
+    vector<Carro> autos;
     srand(time(nullptr));
 
     float carrilesY[] = { 260, 290, 320 };
     float carrilesX[] = { 560, 590, 620 };
 
     for (int i = 0; i < 8; i++) {
-        Auto a;
-        a.tipo = rand() % 4;
-        switch (a.tipo) {
-        case 0: a.img = imgAmarillo; break;
-        case 1: a.img = imgRojo; break;
-        case 2: a.img = imgAzul; break;
-        case 3: a.img = imgVerde; break;
+        Carro a;
+        a.setColor (rand() % 4 );
+        switch (a.getColor()) {
+        case 0: a.setImg( imgAmarillo); break;
+        case 1: a.setImg( imgRojo); break;
+        case 2: a.setImg( imgAzul); break;
+        case 3: a.setImg( imgVerde); break;
         }
 
         bool horizontal = rand() % 2;
-        a.vertical = !horizontal;
-        a.velocidad = 2 + rand() % 3;
+        a.setEstado(!horizontal);
+        a.setVelocidad( 2 + rand() % 3);
 
         if (horizontal) {
-            a.y = carrilesY[rand() % 3];
-            a.x = rand() % SCREEN_W;
-            a.w = (a.tipo == 3) ? 100 : 60; //ancho verdee
-            a.h = 30;
+            a.setPosicion(rand() % SCREEN_W, carrilesY[rand() % 3]);
+			a.setDimension((a.getColor() == 3) ? 100 : 60, 30);
+
         }
         else {
-            a.x = carrilesX[rand() % 3];
-            a.y = rand() % SCREEN_H;
-            a.w = (a.tipo == 3) ? 60 : 30;  
-            a.h = 60;
+            a.setDimension((a.getColor() == 3) ? 60 : 30, 60);
+            a.setPosicion(carrilesX[rand() % 3], rand() % SCREEN_H);
         }
 
         autos.push_back(a);
@@ -181,26 +170,27 @@ int main() {
 
 
         for (auto& a : autos) {
-            if (!a.vertical) {
+            if (!a.getEstado()) {
    
-                a.x += a.velocidad;
-                if (a.x > SCREEN_W) {
-                    a.vertical = true; 
-                    a.x = carrilesX[rand() % 3];
-                    a.y = -60;
-                    a.w = (a.tipo == 3) ? 60 : 30;
-                    a.h = 60;
-                }
+                a.setPosicionX(a.getPosicionX() + a.getVelocidad());
+                if (a.getPosicionX() > SCREEN_W) {
+                    a.setEstado(true);
+                    a.setPosicion(carrilesX[rand() % 3], -60);
+				    a.setDimension((a.getColor() == 3) ? 60 : 30, 60);
+                };
+                
+                    
+                
             }
             else {
                 // Movimiento hacia acbajo
-                a.y += a.velocidad;
-                if (a.y > SCREEN_H) {
-                    a.vertical = false; 
-                    a.y = carrilesY[rand() % 3];
-                    a.x = -100;
-                    a.w = (a.tipo == 3) ? 100 : 60;
-                    a.h = 30;
+                a.setPosicionY(a.getPosicionY() + a.getVelocidad());
+                if (a.getPosicionY() > SCREEN_H) {
+                    a.setEstado(false); 
+					a.setDimension((a.getColor() == 3) ? 100 : 60, 30);
+					a.setPosicion(-100, carrilesY[rand() % 3]); // Reiniciar posición al salir de la pantalla (PosicionX, PosicionY)
+
+                    
                 }
             }
         }

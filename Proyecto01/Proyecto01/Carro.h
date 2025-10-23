@@ -4,7 +4,7 @@
 #include <iostream>
 #include <time.h>
 
-#include "CabinaPeaje.h"
+// #include "CabinaPeaje.h"
 
 using namespace std;
 
@@ -23,8 +23,11 @@ private:
 	float posicionX, posicioY;
 	float ancho, alto; // dimensiones del carro
 	float tiempo;    // horas
+	ALLEGRO_BITMAP* img;
 
 public:
+	Carro(){}
+
 	Carro(bool pEstado, int pColor, string pPlaca)
 	{
 		estado = pEstado;
@@ -35,6 +38,39 @@ public:
 		tiempo = 0.0;
 	}
 
+	void dibujar()
+	{
+		if (img != nullptr)
+		{	
+			if (estado) {
+				// Aqui es si va bajando
+				float bw = al_get_bitmap_width(img);
+				float bh = al_get_bitmap_height(img);
+				float cx = bw / 2.0f;
+				float cy = bh / 2.0f;
+				float xscale = ancho / bw;
+				float yscale = alto / bh;
+				al_draw_scaled_rotated_bitmap(img, cx, cy,
+					posicionX + ancho / 2.0f, posicioY + alto / 2.0f,
+					xscale, yscale, ALLEGRO_PI / 2.0f, 0);
+			}
+			else {
+				al_draw_scaled_bitmap(
+					img, 0, 0, al_get_bitmap_width(img), al_get_bitmap_height(img),
+					posicionX, posicioY, ancho, alto,
+					0
+				);
+			}
+		}
+		else
+		{
+			cerr << "Error: Imagen del carro no cargada." << endl;
+		}
+	}
+	
+
+
+
 	// Getters
 	bool getEstado() { return estado; }
 	int getColor() { return color; }
@@ -43,15 +79,21 @@ public:
 	float getPosicionX() { return posicionX; }
 	float getPosicionY() { return posicioY; }
 	float getTiempo() { return tiempo; }
+	ALLEGRO_BITMAP* getImg() { return img; }
+	float getAncho() { return ancho; }
+	float getAlto() { return alto; }
 
 	// Setters
 	void setEstado(bool pEstado) { estado = pEstado; }
 	void setColor(int pColor) { color = pColor; }
 	void setPlaca(string pPlaca) { placa = pPlaca; }
 	void setVelocidad(float pVelocidad) { velocidad = pVelocidad; }
+	void setPosicion(float pPosicionX, float pPosicionY) { posicionX = pPosicionX; posicioY = pPosicionY;}
 	void setPosicionX(float pPosicionX) { posicionX = pPosicionX; }
 	void setPosicionY(float pPosicionY) { posicioY = pPosicionY; }
 	void setTiempo(float pTiempo) { tiempo = pTiempo; }
+	void setDimension(float pAncho, float pAlto) { ancho = pAncho; alto = pAlto;}
+	void setImg(ALLEGRO_BITMAP* pImg) { img = pImg; }
 
 	// Métodos
 	void decidirCabina();
