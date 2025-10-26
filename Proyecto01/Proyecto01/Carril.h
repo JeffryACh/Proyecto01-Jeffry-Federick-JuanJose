@@ -1,29 +1,23 @@
 #pragma once
-#include <string>
 #include <vector>
-#include <iostream>
-
 #include "Carro.h"
 
 using namespace std;
 
-class Carril
-{
+class Carril {
 private:
-	vector<Carro*> carrosEnCarril; // Vector para almacenar los carros en el carril
+    vector<Carro*> carrosEnCarril;
+
 public:
-	Carril()
-	{
-		carrosEnCarril = vector<Carro*>();
-	}
+    Carril();
 
-	// Getters
-	vector<Carro*> getCarrosEnCarril() { return carrosEnCarril; }
+    // Getters
+    vector<Carro*> getCarrosEnCarril() const;
 
-	// Setters
-	void setCarrosEnCarril(vector<Carro*> pCarrosEnCarril) { carrosEnCarril = pCarrosEnCarril; }
+    // Setters
+    void setCarrosEnCarril(const vector<Carro*>& pCarrosEnCarril);
 
-	// Métodos
-	void agregarCarro(Carro* pCarro);
-	void actualizarPosiciones(float pTiempo);
+    // Métodos
+    void agregarCarro(Carro* pCarro);
+    void actualizarPosiciones(float pTiempo);
 };

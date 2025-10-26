@@ -49,7 +49,8 @@ hay q hacer:
 
 */
 
-void dibujarFondo(ALLEGRO_BITMAP* fondo) {
+void dibujarFondo(ALLEGRO_BITMAP* fondo) 
+{
     al_draw_scaled_bitmap(
         fondo,
         0, 0, al_get_bitmap_width(fondo), al_get_bitmap_height(fondo),
@@ -58,34 +59,37 @@ void dibujarFondo(ALLEGRO_BITMAP* fondo) {
     );
 }
 // #TODO: Pasar esta función a la clase Carro
-void dibujarAutos(vector<Carro>& autos) {
-    for (auto& a : autos) {
+void dibujarAutos(vector<Carro>& autos) 
+{
+    for (auto& a : autos) 
 		a.dibujar();
-        
-    }
 }
 
 
 
 int main() {
 
-    if (!al_init()) {
+    if (!al_init()) 
+    {
         cerr << "No se pudo inicializar Allegro culpa de Rodirgo chavez" << endl;
         return 1;
     }
 
-    if (!al_init_image_addon()) {
+    if (!al_init_image_addon()) 
+    {
         cerr << " No se pudo inicializar el addon de imágenes" << endl;
         return 1;
     }
 
-    if (!al_install_keyboard()) {
+    if (!al_install_keyboard()) 
+    {
         cerr << "No se pudo inicializar el teclado." << endl;
         return 1;
     }
 
     ALLEGRO_DISPLAY* ventana = al_create_display(SCREEN_W, SCREEN_H);
-    if (!ventana) {
+    if (!ventana) 
+    {
         cerr << "No se pudo crear la ventana." << endl;
         return 1;
     }
@@ -93,7 +97,8 @@ int main() {
     al_set_window_title(ventana, "Simulador de Flujo de Tráfico y Peaje");
 
     ALLEGRO_BITMAP* fondo = al_load_bitmap("Fondo.jpg");
-    if (!fondo) {
+    if (!fondo) 
+    {
         cerr << "No se pudo cargar la imagen de fondo estres positv" << endl;
         al_destroy_display(ventana);
         return 1;
@@ -104,7 +109,8 @@ int main() {
     ALLEGRO_BITMAP* imgAzul = al_load_bitmap("carroAzul.png");
     ALLEGRO_BITMAP* imgVerde = al_load_bitmap("carroVerde.png");
 
-    if (!imgAmarillo || !imgRojo || !imgAzul || !imgVerde) {
+    if (!imgAmarillo || !imgRojo || !imgAzul || !imgVerde) 
+    {
         cerr << "No se pudieron cargar las imágenes de los autos." << endl;
         al_destroy_bitmap(fondo);
         al_destroy_display(ventana);
@@ -120,7 +126,8 @@ int main() {
     for (int i = 0; i < 8; i++) {
         Carro a;
         a.setColor (rand() % 4 );
-        switch (a.getColor()) {
+        switch (a.getColor()) 
+        {
         case 0: a.setImg( imgAmarillo); break;
         case 1: a.setImg( imgRojo); break;
         case 2: a.setImg( imgAzul); break;
@@ -131,12 +138,13 @@ int main() {
         a.setEstado(!horizontal);
         a.setVelocidad( 2 + rand() % 3);
 
-        if (horizontal) {
+        if (horizontal) 
+        {
             a.setPosicion(rand() % SCREEN_W, carrilesY[rand() % 3]);
 			a.setDimension((a.getColor() == 3) ? 100 : 60, 30);
-
         }
-        else {
+        else 
+        {
             a.setDimension((a.getColor() == 3) ? 60 : 30, 60);
             a.setPosicion(carrilesX[rand() % 3], rand() % SCREEN_H);
         }
@@ -157,7 +165,8 @@ int main() {
     bool dibujar = true;
     al_start_timer(timer);
 
-    while (!salir) {
+    while (!salir) 
+    {
         ALLEGRO_EVENT ev;
         al_wait_for_event(queue, &ev);
 
@@ -168,34 +177,26 @@ int main() {
         else if (ev.type == ALLEGRO_EVENT_TIMER)
             dibujar = true;
 
-
         for (auto& a : autos) {
-            if (!a.getEstado()) {
-   
-                a.setPosicionX(a.getPosicionX() + a.getVelocidad());
-                if (a.getPosicionX() > SCREEN_W) {
-                    a.setEstado(true);
-                    a.setPosicion(carrilesX[rand() % 3], -60);
-				    a.setDimension((a.getColor() == 3) ? 60 : 30, 60);
-                };
-                
-                    
-                
-            }
-            else {
-                // Movimiento hacia acbajo
-                a.setPosicionY(a.getPosicionY() + a.getVelocidad());
-                if (a.getPosicionY() > SCREEN_H) {
-                    a.setEstado(false); 
-					a.setDimension((a.getColor() == 3) ? 100 : 60, 30);
-					a.setPosicion(-100, carrilesY[rand() % 3]); // Reiniciar posición al salir de la pantalla (PosicionX, PosicionY)
-
-                    
-                }
-            }
+            if (!a.getEstado()) {  
+                a.setPosicion(a.getPosicionX() + a.getVelocidad(), a.getPosicionY());  
+                if (a.getPosicionX() > SCREEN_W) {  
+                    a.setEstado(true);  
+                    a.setPosicion(carrilesX[rand() % 3], -60);  
+                }  
+            }  
+            else {  
+                // Movimiento hacia abajo  
+                a.setPosicion(a.getPosicionX(), a.getPosicionY() + a.getVelocidad());  
+                if (a.getPosicionY() > SCREEN_H) {  
+                    a.setEstado(false);  
+                    a.setPosicion(-100, carrilesY[rand() % 3]);  
+                }  
+            } 
         }
 
-        if (dibujar && al_is_event_queue_empty(queue)) {
+        if (dibujar && al_is_event_queue_empty(queue)) 
+        {
             dibujar = false;
             al_clear_to_color(al_map_rgb(0, 0, 0));
             dibujarFondo(fondo);
