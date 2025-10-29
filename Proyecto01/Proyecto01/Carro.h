@@ -16,6 +16,9 @@ private:
     float tiempo;      // Tiempo en el sistema
     ALLEGRO_BITMAP* img; // Imagen del carro
 
+    // Nuevo: temporizador de espera tras colisión (segundos)
+    float waitTimer;
+
 public:
     Carro();
     Carro(bool pEstado, int pColor, const std::string& pPlaca);
@@ -33,6 +36,10 @@ public:
     ALLEGRO_BITMAP* getImg() const;
     float getAncho() const;
     float getAlto() const;
+
+    // Nuevo: acceso a waitTimer
+    float getWaitTimer() const;
+    void setWaitTimer(float t);
 
     // Setters
     void setEstado(bool pEstado);

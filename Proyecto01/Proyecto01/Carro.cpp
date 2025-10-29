@@ -1,35 +1,60 @@
 #include "Carro.h"
-#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
+#include <cmath>
+#include <algorithm>
 
 /*
 * Implementación de la clase Carro
 */
 Carro::Carro() : orientacion(false), estado(true), color(0), placa("AAA-000"),
-                 velocidad(0), posicionX(0), posicionY(0), ancho(0), alto(0), tiempo(0), img(nullptr) {}
+                 velocidad(0), posicionX(0), posicionY(0),
+                 ancho(60), alto(30), tiempo(0), img(nullptr), waitTimer(0.0f) {}
 
 /*
 * Constructor parametrizado
 */
 Carro::Carro(bool pEstado, int pColor, const std::string& pPlaca)
     : orientacion(false), estado(pEstado), color(pColor), placa(pPlaca),
-      velocidad(0), posicionX(0), posicionY(0), ancho(0), alto(0), tiempo(0), img(nullptr) {}
-
+      velocidad(0), posicionX(0), posicionY(0),
+      ancho(60), alto(30), tiempo(0), img(nullptr), waitTimer(0.0f) {}
 
 /*
 * Método para dibujar el carro en la pantalla
-* Observación: Se asume que la imagen del carro ya ha sido cargada en 'img'
-* @param:
-*   - Ninguno
-* @return:
-*   + Ninguno
+* Escala uniforme basada en la arista mayor (max ancho/alto) para que todas las
+* imágenes tengan la misma «presencia» visual sin deformarse.
 */
 void Carro::dibujar()
 {
-    if (img) 
-    {
-        al_draw_scaled_bitmap(img, 0, 0, al_get_bitmap_width(img), al_get_bitmap_height(img),
-                              posicionX, posicionY, ancho, alto, 0);
-    }
+    if (!img) return;
+
+    float origW = static_cast<float>(al_get_bitmap_width(img));
+    float origH = static_cast<float>(al_get_bitmap_height(img));
+    if (origW <= 0.0f || origH <= 0.0f) return;
+
+    float targetW = getAncho();
+    float targetH = getAlto();
+
+    float angle = getEstado() ? ALLEGRO_PI / 2.0f : 0.0f;
+
+    float origLong = std::max(origW, origH);
+    float targetLong = std::max(targetW, targetH);
+    float scale = (origLong > 0.0f) ? (targetLong / origLong) : 1.0f;
+
+    float destCx = getPosicionX() + getAncho() * 0.5f;
+    float destCy = getPosicionY() + getAlto() * 0.5f;
+
+    al_draw_scaled_rotated_bitmap(
+        img,
+        origW * 0.5f,       
+        origH * 0.5f,       
+        destCx,             
+        destCy,             
+        scale,              
+        scale,              
+        angle,             
+        0
+    );
 }
 
 // Getters
@@ -83,6 +108,16 @@ float Carro::getAlto() const
     return alto;
 }
 
+float Carro::getWaitTimer() const
+{
+    return waitTimer;
+}
+
+void Carro::setWaitTimer(float t)
+{
+    waitTimer = t;
+}
+
 //  Setters
 
 void Carro::setEstado(bool pEstado)
@@ -129,16 +164,9 @@ void Carro::setImg(ALLEGRO_BITMAP* pImg)
 
 /*
 * Método para avanzar el carro en función de su velocidad y el tiempo transcurrido
-* Observación: Actualiza la posición del carro
-* @param:
-*   - float pVelocidad: Velocidad del carro
-*   - float pTiempo: Tiempo transcurrido
-* @return:
-*   + Ninguno
 */
 void Carro::avanzar(float pVelocidad, float pTiempo)
 {
-    // Actualiza la posición en función de la velocidad y el tiempo
     if (!orientacion) { // Movimiento horizontal
         posicionX += pVelocidad * pTiempo;
     } else { // Movimiento vertical
