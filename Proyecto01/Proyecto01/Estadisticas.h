@@ -1,12 +1,23 @@
 #pragma once
-#include "Simulador.h"
+#include <vector>
 #include <string>
-
-using namespace std;
+#include <tuple>
 
 class Estadisticas {
+private:
+    std::vector<std::tuple<int, float, float, float, float>> registros;
+
+    float tiempoSimTotal; 
 public:
-    void registrarEventos(Simulador& pSimulador);
-    void generarCSV(const string& pNombreArchivo);
-    void calcularMetricas();
+    Estadisticas();
+    void registrarGeneracion(int id, float tiempoGen);
+    void registrarLlegadaCola(int id, float tiempoLlegada);
+    void registrarInicioServicio(int id, float tiempoInicio); 
+    void registrarSalida(int id, float tiempoSalida, float tiempoServicioAsignado);
+    void generarCSV(const std::string& nombreArchivo);
+    int totalProcesados() const;
+    float tiempoPromedioEspera() const;
+    float tiempoPromedioSistema() const;
+    float tasaFlujoPromedio() const;
+    void setTiempoSimTotal(float t) { tiempoSimTotal = t; }
 };

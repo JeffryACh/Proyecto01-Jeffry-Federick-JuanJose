@@ -1,39 +1,102 @@
 #include "CabinaPeaje.h"
+#include "Estadisticas.h"
+#include <random>
+#include <vector>
 
-CabinaPeaje::CabinaPeaje(float pTiempoAtencion) : tiempoAtencion(pTiempoAtencion), cantidadCarrosAtendidos(0) {}
+CabinaPeaje::CabinaPeaje(float pMin, float pMax, float px, float py, float pSpacing)
+    : ocupada(false), tiempoRestanteServicio(0.0f),
+    tiempoTotalOcupada(0.0f), cantidadCarrosAtendidos(0),
+    tiempoAtencionMin(pMin), tiempoAtencionMax(pMax),
+    enServicio(nullptr),
+    posX(px), posY(py), spacing(pSpacing)
+{
+}
+
+void CabinaPeaje::reposicionarCola() {
+    std::vector<std::shared_ptr<Carro>> temp;
+    while (!cola.empty()) {
+        temp.push_back(cola.front());
+        cola.pop();
+    }
+    for (size_t i = 0; i < temp.size(); ++i) {
+        auto& carro = temp[i];
+        if (!carro) continue;
+        if (!carro->getEstado()) {
+            float x = posX - static_cast<float>(i + 1) * spacing;
+            float y = carro->getPosicionY(); 
+            carro->setPosicion(x, y);
+        } else {
+            float x = carro->getPosicionX(); 
+            float y = posY - static_cast<float>(i + 1) * spacing;
+            carro->setPosicion(x, y);
+        }
+        cola.push(carro);
+    }
+}
+
+void CabinaPeaje::encolar(std::shared_ptr<Carro> carro) {
+    if (!carro) return;
+    carro->setCabinaAsignada(this);
+    cola.push(carro);
+    reposicionarCola();
+    carro->setTiempoLlegadaCola(carro->getTiempo());
+}
+
+int CabinaPeaje::colaSize() const {
+    return static_cast<int>(cola.size());
+}
+
+bool CabinaPeaje::estaOcupada() const {
+    return ocupada;
+}
+
+void CabinaPeaje::iniciarServicio(std::shared_ptr<Carro> carro, float servicioAsignado, float tiempoSim, Estadisticas& estad) {
+    if (!carro) return;
+    ocupada = true;
+    tiempoRestanteServicio = servicioAsignado;
+    cantidadCarrosAtendidos++;
+    estad.registrarInicioServicio(carro->getId(), tiempoSim);
+    enServicio = carro;
+    carro->setTiempoServicioAsignado(servicioAsignado);
+    carro->setWaitTimer(servicioAsignado);
+    carro->setCabinaAsignada(this);
+    if (!carro->getEstado()) { 
+        carro->setPosicion(posX, carro->getPosicionY());
+    } else { 
+        carro->setPosicion(carro->getPosicionX(), posY);
+    }
+}
+
+void CabinaPeaje::actualizar(float dt, float tiempoSim, Estadisticas& estad) {
+    if (ocupada) {
+        float reduccion = dt;
+        tiempoRestanteServicio -= reduccion;
+        tiempoTotalOcupada += reduccion;
+        if (tiempoRestanteServicio <= 0.0f) {
+            ocupada = false;
+            tiempoRestanteServicio = 0.0f;
+            enServicio = nullptr;
+        }
+    }
+
+
+    if (!ocupada && !cola.empty()) {
+        std::shared_ptr<Carro> siguiente = cola.front();
+        cola.pop();
+        static std::mt19937 rng((std::random_device())());
+        std::uniform_real_distribution<float> dist(tiempoAtencionMin, tiempoAtencionMax);
+        float servicio = dist(rng);
+        iniciarServicio(siguiente, servicio, tiempoSim, estad);
+
+        
+        reposicionarCola();
+    }
+}
 
 // Getters
-float CabinaPeaje::getTiempoAtencion() const
-{
-    return tiempoAtencion;
-}
-
-int CabinaPeaje::getCantidadCarrosAtendidos() const
-{
-    return cantidadCarrosAtendidos;
-}
+float CabinaPeaje::getTiempoTotalOcupada() const { return tiempoTotalOcupada; }
+int CabinaPeaje::getCantidadCarrosAtendidos() const { return cantidadCarrosAtendidos; }
 
 // Setters
-void CabinaPeaje::setTiempoAtencion(float pTiempoAtencion) 
-{
-    tiempoAtencion = pTiempoAtencion;
-}
-
-void CabinaPeaje::setCantidadCarrosAtendidos(int pCantidadCarrosAtendidos) 
-{
-    cantidadCarrosAtendidos = pCantidadCarrosAtendidos;
-}
-
-/*
-* Método para procesar un carro en la cabina de peaje
-* Observación: Incrementa el contador de carros atendidos y actualiza el tiempo del carro
-* @param:
-*   - Carro* pCarro: Puntero al carro a procesar
-* @return:
-*   + Ninguno
-*/
-void CabinaPeaje::procesarCarro(Carro* pCarro) 
-{
-    cantidadCarrosAtendidos++;
-    pCarro->setTiempo(pCarro->getTiempo() + tiempoAtencion);
-}
+float CabinaPeaje::getPosX() const { return posX; }
+float CabinaPeaje::getPosY() const { return posY; }

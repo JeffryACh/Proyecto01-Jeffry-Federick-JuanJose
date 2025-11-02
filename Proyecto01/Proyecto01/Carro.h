@@ -1,6 +1,10 @@
 #pragma once
 #include <string>
 #include <allegro5/allegro.h>
+#include <vector>
+
+
+class CabinaPeaje;
 
 using namespace std;
 
@@ -15,11 +19,42 @@ private:
     float ancho, alto; // Dimensiones del carro
     float tiempo;      // Tiempo en el sistema
     ALLEGRO_BITMAP* img; // Imagen del carro
-
-    // Nuevo: temporizador de espera tras colisión (segundos)
     float waitTimer;
+    float peajeCooldown;
+    int id;
+    float tiempoGenerado;
+    float tiempoLlegadaCola;
+    float tiempoSalida;
+    float tiempoServicioAsignado;
+    CabinaPeaje* cabinaAsignada;
 
+    // getters / setters nuevos
 public:
+    void setId(int pId);
+    int getId() const;
+
+    void setTiempoGenerado(float t);
+    float getTiempoGenerado() const;
+
+    void setTiempoLlegadaCola(float t);
+    float getTiempoLlegadaCola() const;
+
+    void setTiempoSalida(float t);
+    float getTiempoSalida() const;
+
+    void setTiempoServicioAsignado(float t);
+    float getTiempoServicioAsignado() const;
+
+    void setCabinaAsignada(CabinaPeaje* c);
+    CabinaPeaje* getCabinaAsignada() const;
+
+    // cooldown peaje
+    void setPeajeCooldown(float t);
+    float getPeajeCooldown() const;
+
+    // implementar decidirCabina (ya lo tenías pendiente)
+    int decidirCabina(const std::vector<CabinaPeaje>& cabinas) const;
+
     Carro();
     Carro(bool pEstado, int pColor, const std::string& pPlaca);
 
@@ -36,8 +71,6 @@ public:
     ALLEGRO_BITMAP* getImg() const;
     float getAncho() const;
     float getAlto() const;
-
-    // Nuevo: acceso a waitTimer
     float getWaitTimer() const;
     void setWaitTimer(float t);
 

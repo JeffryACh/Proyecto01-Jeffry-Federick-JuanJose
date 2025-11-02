@@ -13,12 +13,17 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
-#include <cmath>        
+#include <cmath>
+#include <memory>        
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
+#include "Simulador.h"
+
+Simulador sim(5 , 0.6f );
 
 #include "Carro.h"
 
+//NOTA IMPORTANTE:  Cambien la imagen del peaje cuando ya este subido este archivo en el repo :)
 using namespace std;
 
 const int SCREEN_W = 1200;
@@ -30,12 +35,11 @@ hay q hacer:
 
 -Cambiar imagen fondo para que sea unidireccional(paint) (hecho)
 -implementar colisiones (hecho)
--Poner peaje
+-Poner peaje con logica (imagen) (hecho)
 -carro verde (cambiar tamaño) (hecho)
 -carro amarillo (cambiar tamaño) (hecho)
-
+-Estadisticas visuales 
 */
-
 void dibujarFondo(ALLEGRO_BITMAP* fondo) 
 {
     al_draw_scaled_bitmap(
@@ -45,31 +49,28 @@ void dibujarFondo(ALLEGRO_BITMAP* fondo)
         0
     );
 }
-void dibujarAutos(vector<Carro>& autos) 
-{
-    for (auto& a : autos) 
-        a.dibujar();
+void dibujarAutos(const vector<shared_ptr<Carro>>& autos) {
+    for (const auto& a : autos)
+        a->dibujar();
 }
 
-
-bool hayCarroAdelante(const Carro& actual, const vector<Carro>& autos, float distanciaMinima, float toleranciaCarril)
+bool hayCarroAdelante(const Carro& actual, const vector<shared_ptr<Carro>>& autos, float distanciaMinima, float toleranciaCarril)
 {
-   
-    if (!actual.getEstado()) 
+    if (!actual.getEstado())
     {
-        for (const Carro& otro : autos)
+        for (const auto& otroPtr : autos)
         {
-            if (&otro == &actual) continue;
-            
-            if (fabs(actual.getPosicionY() - otro.getPosicionY()) > toleranciaCarril) continue;
+            const Carro* otro = otroPtr.get();
+            if (otro == &actual) continue;
 
            
-            float dx = otro.getPosicionX() - actual.getPosicionX();
+            if (fabs(actual.getPosicionY() - otro->getPosicionY()) > toleranciaCarril) continue;
+
+            float dx = otro->getPosicionX() - actual.getPosicionX();
             if (dx <= 0.0f) continue;
 
-            
             float frenteActual = actual.getPosicionX() + actual.getAncho();
-            float colaOtro = otro.getPosicionX();
+            float colaOtro = otro->getPosicionX();
             float separacion = colaOtro - frenteActual;
 
             if (separacion < distanciaMinima) return true;
@@ -77,17 +78,19 @@ bool hayCarroAdelante(const Carro& actual, const vector<Carro>& autos, float dis
     }
     else // vertical 
     {
-        for (const Carro& otro : autos)
+        for (const auto& otroPtr : autos)
         {
-            if (&otro == &actual) continue;
-     
-            if (fabs(actual.getPosicionX() - otro.getPosicionX()) > toleranciaCarril) continue;
+            const Carro* otro = otroPtr.get();
+            if (otro == &actual) continue;
 
-            float dy = otro.getPosicionY() - actual.getPosicionY();
+           
+            if (fabs(actual.getPosicionX() - otro->getPosicionX()) > toleranciaCarril) continue;
+
+            float dy = otro->getPosicionY() - actual.getPosicionY();
             if (dy <= 0.0f) continue;
 
             float frenteActual = actual.getPosicionY() + actual.getAlto();
-            float colaOtro = otro.getPosicionY();
+            float colaOtro = otro->getPosicionY();
             float separacion = colaOtro - frenteActual;
 
             if (separacion < distanciaMinima) return true;
@@ -98,7 +101,7 @@ bool hayCarroAdelante(const Carro& actual, const vector<Carro>& autos, float dis
 }
 
 
-void resolverSolapamientos(vector<Carro>& autos)
+void resolverSolapamientos(vector<shared_ptr<Carro>>& autos)
 {
     const float toleranciaCarril = 12.0f;
 
@@ -106,10 +109,12 @@ void resolverSolapamientos(vector<Carro>& autos)
     {
         for (size_t j = i + 1; j < autos.size(); ++j)
         {
-            Carro& a = autos[i];
-            Carro& b = autos[j];
+            Carro& a = *autos[i];
+            Carro& b = *autos[j];
 
-            
+
+            if (a.getCabinaAsignada() != nullptr || b.getCabinaAsignada() != nullptr) continue;
+
             if (a.getEstado() != b.getEstado()) continue;
 
             if (!a.getEstado()) 
@@ -166,7 +171,6 @@ void resolverSolapamientos(vector<Carro>& autos)
     }
 }
 
-
 int main() {
 
     if (!al_init()) 
@@ -199,7 +203,7 @@ int main() {
     ALLEGRO_BITMAP* fondo = al_load_bitmap("Fondo.jpg");
     if (!fondo) 
     {
-        cerr << "No se pudo cargar la imagen de fondo estres positv" << endl;
+        cerr << "No se pudo cargar la imagen de fondo estres positivo" << endl;
         al_destroy_display(ventana);
         return 1;
     }
@@ -217,43 +221,50 @@ int main() {
         return 1;
     }
 
-    vector<Carro> autos;
+	ALLEGRO_BITMAP* imgPeaje = al_load_bitmap("C:\\Users\\juanj\\Downloads\\Image 2 nov 2025, 12_15_24.png");           // CambiEN esta ruta a como estan las otras cuandoe este en el repo
+    if (!imgPeaje) {
+        cerr << "No se pudo cargar la imagen del peaje (Image 2 nov 2025, 12_15_24.png)." << endl;
+        imgPeaje = nullptr;
+    }
+
+    std::vector<std::shared_ptr<Carro>> autos;
     srand(time(nullptr));
 
     float carrilesY[] = { 260, 290, 320 };
     float carrilesX[] = { 560, 590, 620 };
 
     for (int i = 0; i < 8; i++) {
-        Carro a;
-        a.setColor (rand() % 4 );
-        switch (a.getColor()) 
-        {
-        case 0: a.setImg( imgAmarillo); break;
-        case 1: a.setImg( imgRojo); break;
-        case 2: a.setImg( imgAzul); break;
-        case 3: a.setImg( imgVerde); break;
+        auto a = std::make_shared<Carro>();
+        a->setColor(rand() % 4);
+        switch (a->getColor()) {
+        case 0: a->setImg(imgAmarillo); break;
+        case 1: a->setImg(imgRojo); break;
+        case 2: a->setImg(imgAzul); break;
+        case 3: a->setImg(imgVerde); break;
         }
 
         bool horizontal = rand() % 2;
-        a.setEstado(!horizontal);
-        a.setVelocidad( 2 + rand() % 3);
+        a->setEstado(!horizontal);
+        a->setVelocidad(2 + rand() % 3);
+        a->setTiempoGenerado(sim.getTiempoSim());
+        a->setId(sim.getNextId());
 
-        
-        if (horizontal)
-        {
-            a.setDimension(60.0f, 30.0f); 
-            a.setPosicion(static_cast<float>(rand() % SCREEN_W), carrilesY[rand() % 3]);
+        if (horizontal) {
+            a->setDimension(60.0f, 30.0f);
+            int maxX = std::max(50, SCREEN_W - 400); 
+            a->setPosicion(static_cast<float>(rand() % maxX), carrilesY[rand() % 3]);
         }
-        else
-        {
-            a.setDimension(30.0f, 60.0f); 
-            a.setPosicion(carrilesX[rand() % 3], static_cast<float>(rand() % SCREEN_H));
+        else {
+            a->setDimension(30.0f, 60.0f);
+            int maxY = std::max(50, SCREEN_H - 200);
+            a->setPosicion(carrilesX[rand() % 3], static_cast<float>(rand() % maxY));
         }
 
         autos.push_back(a);
+        sim.agregarVehiculo(a);
     }
 
-
+    resolverSolapamientos(autos);
 
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / FPS);
     ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
@@ -283,40 +294,32 @@ int main() {
         else if (ev.type == ALLEGRO_EVENT_TIMER)
             dibujar = true;
 
-        
+        sim.actualizar(dt);
+
         for (auto& a : autos) {
-            
-            if (a.getWaitTimer() > 0.0f) {
-                float nuevo = a.getWaitTimer() - dt;
-                a.setWaitTimer(nuevo > 0.0f ? nuevo : 0.0f);
-                if (a.getWaitTimer() > 0.0f) continue;
+            Carro* ptr = a.get();
+
+            if (ptr->getCabinaAsignada() == nullptr && ptr->getWaitTimer() <= 0.0f) {
+                bool bloqueado = hayCarroAdelante(*ptr, autos, distanciaMinima, toleranciaCarril);
+                float moveSpeed = bloqueado ? 0.0f : ptr->getVelocidad();
+
+                if (!ptr->getEstado()) {
+                    ptr->setPosicion(ptr->getPosicionX() + moveSpeed, ptr->getPosicionY());
+                    if (ptr->getPosicionX() > SCREEN_W) {
+                        ptr->setEstado(true);
+                        ptr->setPosicion(carrilesX[rand() % 3], -60);
+                    }
+                }
+                else {
+                    ptr->setPosicion(ptr->getPosicionX(), ptr->getPosicionY() + moveSpeed);
+                    if (ptr->getPosicionY() > SCREEN_H) {
+                        ptr->setEstado(false);
+                        ptr->setPosicion(-100, carrilesY[rand() % 3]);
+                    }
+                }
             }
-
-            
-            bool bloqueado = hayCarroAdelante(a, autos, distanciaMinima, toleranciaCarril);
-            float moveSpeed = bloqueado ? 0.0f : a.getVelocidad();
-
-            
-            if (bloqueado && a.getWaitTimer() <= 0.0f) {
-                a.setWaitTimer(1.0f);
-                moveSpeed = 0.0f;
-            }
-
-            if (!a.getEstado()) {  
-                a.setPosicion(a.getPosicionX() + moveSpeed, a.getPosicionY());  
-                if (a.getPosicionX() > SCREEN_W) {  
-                    a.setEstado(true);  
-                    a.setPosicion(carrilesX[rand() % 3], -60);  
-                }  
-            }  
-            else {  
-                a.setPosicion(a.getPosicionX(), a.getPosicionY() + moveSpeed);  
-                if (a.getPosicionY() > SCREEN_H) {  
-                    a.setEstado(false);  
-                    a.setPosicion(-100, carrilesY[rand() % 3]);  
-                }  
-            } 
         }
+
         resolverSolapamientos(autos);
 
         if (dibujar && al_is_event_queue_empty(queue)) 
@@ -324,10 +327,37 @@ int main() {
             dibujar = false;
             al_clear_to_color(al_map_rgb(0, 0, 0));
             dibujarFondo(fondo);
+
             dibujarAutos(autos);
+
+            if (imgPeaje) {
+                int pw = al_get_bitmap_width(imgPeaje);
+                int ph = al_get_bitmap_height(imgPeaje);
+                const float targetW = 180.0f;                 
+                const float scale = targetW / static_cast<float>(pw);
+                const float heightScale = 0.6f;                
+                const float targetH = static_cast<float>(ph) * scale * heightScale;
+                const auto& cabinas = sim.getCabinas();
+                if (!cabinas.empty()) {
+                    const auto& cab = cabinas.front();              
+                    const float offsetY = 146.0f;                      // bajar la imagen de peaje
+                    const float offsetX = 80.0f;                       // mover a la derecha de peaje
+                    float dx = cab.getPosX() - targetW * 0.5f + offsetX;
+                    float dy = cab.getPosY() - targetH * 0.5f + offsetY;
+                    al_draw_scaled_bitmap(
+                        imgPeaje,
+                        0, 0, pw, ph,
+                        dx, dy,
+                        targetW, targetH,
+                        0
+                    );
+                }
+            }
+
             al_flip_display();
         }
     }
+    sim.getEstadisticas().generarCSV("toll_simulation_log.csv");
 
 
     al_destroy_bitmap(fondo);
@@ -335,6 +365,7 @@ int main() {
     al_destroy_bitmap(imgRojo);
     al_destroy_bitmap(imgAzul);
     al_destroy_bitmap(imgVerde);
+    if (imgPeaje) al_destroy_bitmap(imgPeaje);
     al_destroy_display(ventana);
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);

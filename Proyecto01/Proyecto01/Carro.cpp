@@ -1,15 +1,22 @@
 #include "Carro.h"
+#include "CabinaPeaje.h" 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <cmath>
 #include <algorithm>
+#include <vector>
 
 /*
 * Implementación de la clase Carro
 */
+
 Carro::Carro() : orientacion(false), estado(true), color(0), placa("AAA-000"),
                  velocidad(0), posicionX(0), posicionY(0),
-                 ancho(60), alto(30), tiempo(0), img(nullptr), waitTimer(0.0f) {}
+                 ancho(60), alto(30), tiempo(0), img(nullptr), waitTimer(0.0f),
+                 peajeCooldown(0.0f),
+                 id(0), tiempoGenerado(0.0f), tiempoLlegadaCola(0.0f),
+                 tiempoSalida(0.0f), tiempoServicioAsignado(0.0f),
+                 cabinaAsignada(nullptr) {}
 
 /*
 * Constructor parametrizado
@@ -17,7 +24,11 @@ Carro::Carro() : orientacion(false), estado(true), color(0), placa("AAA-000"),
 Carro::Carro(bool pEstado, int pColor, const std::string& pPlaca)
     : orientacion(false), estado(pEstado), color(pColor), placa(pPlaca),
       velocidad(0), posicionX(0), posicionY(0),
-      ancho(60), alto(30), tiempo(0), img(nullptr), waitTimer(0.0f) {}
+      ancho(60), alto(30), tiempo(0), img(nullptr), waitTimer(0.0f),
+      peajeCooldown(0.0f),
+      id(0), tiempoGenerado(0.0f), tiempoLlegadaCola(0.0f),
+      tiempoSalida(0.0f), tiempoServicioAsignado(0.0f),
+      cabinaAsignada(nullptr) {}
 
 /*
 * Método para dibujar el carro en la pantalla
@@ -174,7 +185,39 @@ void Carro::avanzar(float pVelocidad, float pTiempo)
     }
 }
 
-void Carro::decidirCabina()
-{
-    // Implementación pendiente
+
+// getters/setters de cooldown y cabina
+void Carro::setCabinaAsignada(CabinaPeaje* c) { cabinaAsignada = c; }
+CabinaPeaje* Carro::getCabinaAsignada() const { return cabinaAsignada; }
+
+void Carro::setPeajeCooldown(float t) { peajeCooldown = t; }
+float Carro::getPeajeCooldown() const { return peajeCooldown; }
+
+// setters/getters nuevos 
+void Carro::setId(int pId) { id = pId; }
+int Carro::getId() const { return id; }
+
+void Carro::setTiempoGenerado(float t) { tiempoGenerado = t; }
+float Carro::getTiempoGenerado() const { return tiempoGenerado; }
+
+void Carro::setTiempoLlegadaCola(float t) { tiempoLlegadaCola = t; }
+float Carro::getTiempoLlegadaCola() const { return tiempoLlegadaCola; }
+
+void Carro::setTiempoSalida(float t) { tiempoSalida = t; }
+float Carro::getTiempoSalida() const { return tiempoSalida; }
+
+void Carro::setTiempoServicioAsignado(float t) { tiempoServicioAsignado = t; }
+float Carro::getTiempoServicioAsignado() const { return tiempoServicioAsignado; }
+
+int Carro::decidirCabina(const std::vector<CabinaPeaje>& cabinas) const {
+    int mejor = 0;
+    int tamMejor = cabinas.empty() ? 0 : cabinas[0].colaSize();
+    for (size_t i = 1; i < cabinas.size(); ++i) {
+        int tam = cabinas[i].colaSize();
+        if (tam < tamMejor) {
+            mejor = static_cast<int>(i);
+            tamMejor = tam;
+        }
+    }
+    return mejor;
 }

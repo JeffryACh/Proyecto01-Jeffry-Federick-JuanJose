@@ -1,19 +1,34 @@
 #pragma once
 #include <vector>
-#include "Carril.h"
+#include <memory>
+#include "Carro.h"
 #include "CabinaPeaje.h"
-
-using namespace std;
+#include "Estadisticas.h"
 
 class Simulador {
 private:
-    vector<Carril> carriles;
-    vector<CabinaPeaje> cabinas;
+    std::vector<std::shared_ptr<Carro>> vehiculos; 
+    std::vector<CabinaPeaje> cabinas;
+    Estadisticas estad;
+    float tiempoSim; 
+    int nextId;
+    float probGeneracionPorSegundo; 
+    float tiempoZonaPeajeX; 
+    float simSpeed; 
 
 public:
-    Simulador();
+    Simulador(int numCabinas = 5, float pGen = 0.5f);
+    ~Simulador();
+    void actualizar(float dt); 
+    void generarVehiculosAleatorios(float dt);
+    void procesarFinalizados(float dt);
+    Estadisticas& getEstadisticas() { return estad; }
+    float getTiempoSim() const { return tiempoSim; }
+    int getNextId() { return nextId++; }
+    void agregarVehiculo(std::shared_ptr<Carro> nuevo);
 
-    void iniciar();
-    void actualizar(float pTiempo);
-    void detener();
+
+    const std::vector<CabinaPeaje>& getCabinas() const;
 };
+
+
