@@ -221,7 +221,7 @@ int main() {
         return 1;
     }
 
-	ALLEGRO_BITMAP* imgPeaje = al_load_bitmap("C:\\Users\\juanj\\Downloads\\Image 2 nov 2025, 12_15_24.png");           // CambiEN esta ruta a como estan las otras cuandoe este en el repo
+	ALLEGRO_BITMAP* imgPeaje = al_load_bitmap("Image 2 nov 2025, 12_15_24.png");           // CambiEN esta ruta a como estan las otras cuandoe este en el repo
     if (!imgPeaje) {
         cerr << "No se pudo cargar la imagen del peaje (Image 2 nov 2025, 12_15_24.png)." << endl;
         imgPeaje = nullptr;

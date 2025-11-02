@@ -32,8 +32,6 @@
     <Image Include="carroAzul.png" />
     <Image Include="carroRojo.png" />
     <Image Include="carroVerde.png" />
-    <Image Include="casa.png" />
-    <Image Include="edificio.png" />
     <Image Include="Fondo.jpg" />
   </ItemGroup>
   <ItemGroup>
@@ -42,9 +40,6 @@
     <ClInclude Include="Carro.h" />
     <ClInclude Include="Estadisticas.h" />
     <ClInclude Include="Simulador.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

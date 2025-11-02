@@ -62,12 +62,6 @@
     <Image Include="carroVerde.png">
       <Filter>Archivos de recursos\Carros</Filter>
     </Image>
-    <Image Include="casa.png">
-      <Filter>Archivos de recursos\Fondo</Filter>
-    </Image>
-    <Image Include="edificio.png">
-      <Filter>Archivos de recursos\Fondo</Filter>
-    </Image>
     <Image Include="Fondo.jpg">
       <Filter>Archivos de recursos\Fondo</Filter>
     </Image>
@@ -91,8 +85,5 @@
     <ClInclude Include="Simulador.h">
       <Filter>Archivos de encabezado\Clases</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>
