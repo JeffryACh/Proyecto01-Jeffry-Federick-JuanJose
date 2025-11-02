@@ -27,11 +27,11 @@
     <ClCompile Include="Simulador.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\..\..\..\Downloads\Image 2 nov 2025, 12_15_24.png" />
     <Image Include="carroAmarillo.png" />
     <Image Include="carroAzul.png" />
     <Image Include="carroRojo.png" />
     <Image Include="carroVerde.png" />
+    <Image Include="casetaDePeaje.png" />
     <Image Include="Fondo.jpg" />
   </ItemGroup>
   <ItemGroup>

@@ -65,7 +65,7 @@
     <Image Include="Fondo.jpg">
       <Filter>Archivos de recursos\Fondo</Filter>
     </Image>
-    <Image Include="..\..\..\..\..\..\Downloads\Image 2 nov 2025, 12_15_24.png">
+    <Image Include="casetaDePeaje.png">
       <Filter>Archivos de recursos\Peaje</Filter>
     </Image>
   </ItemGroup>

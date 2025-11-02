@@ -49,7 +49,8 @@ void dibujarFondo(ALLEGRO_BITMAP* fondo)
         0
     );
 }
-void dibujarAutos(const vector<shared_ptr<Carro>>& autos) {
+void dibujarAutos(const vector<shared_ptr<Carro>>& autos) 
+{
     for (const auto& a : autos)
         a->dibujar();
 }
@@ -171,7 +172,8 @@ void resolverSolapamientos(vector<shared_ptr<Carro>>& autos)
     }
 }
 
-int main() {
+int main() 
+{
 
     if (!al_init()) 
     {
@@ -221,8 +223,9 @@ int main() {
         return 1;
     }
 
-	ALLEGRO_BITMAP* imgPeaje = al_load_bitmap("Image 2 nov 2025, 12_15_24.png");           // CambiEN esta ruta a como estan las otras cuandoe este en el repo
-    if (!imgPeaje) {
+    ALLEGRO_BITMAP* imgPeaje = al_load_bitmap("casetaDePeaje.png");
+    if (!imgPeaje) 
+    {
         cerr << "No se pudo cargar la imagen del peaje (Image 2 nov 2025, 12_15_24.png)." << endl;
         imgPeaje = nullptr;
     }
@@ -233,10 +236,12 @@ int main() {
     float carrilesY[] = { 260, 290, 320 };
     float carrilesX[] = { 560, 590, 620 };
 
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) 
+    {
         auto a = std::make_shared<Carro>();
         a->setColor(rand() % 4);
-        switch (a->getColor()) {
+        switch (a->getColor()) 
+        {
         case 0: a->setImg(imgAmarillo); break;
         case 1: a->setImg(imgRojo); break;
         case 2: a->setImg(imgAzul); break;
@@ -249,12 +254,14 @@ int main() {
         a->setTiempoGenerado(sim.getTiempoSim());
         a->setId(sim.getNextId());
 
-        if (horizontal) {
+        if (horizontal) 
+        {
             a->setDimension(60.0f, 30.0f);
             int maxX = std::max(50, SCREEN_W - 400); 
             a->setPosicion(static_cast<float>(rand() % maxX), carrilesY[rand() % 3]);
         }
-        else {
+        else 
+        {
             a->setDimension(30.0f, 60.0f);
             int maxY = std::max(50, SCREEN_H - 200);
             a->setPosicion(carrilesX[rand() % 3], static_cast<float>(rand() % maxY));
@@ -296,23 +303,29 @@ int main() {
 
         sim.actualizar(dt);
 
-        for (auto& a : autos) {
+        for (auto& a : autos) 
+        {
             Carro* ptr = a.get();
 
-            if (ptr->getCabinaAsignada() == nullptr && ptr->getWaitTimer() <= 0.0f) {
+            if (ptr->getCabinaAsignada() == nullptr && ptr->getWaitTimer() <= 0.0f)
+            {
                 bool bloqueado = hayCarroAdelante(*ptr, autos, distanciaMinima, toleranciaCarril);
                 float moveSpeed = bloqueado ? 0.0f : ptr->getVelocidad();
 
-                if (!ptr->getEstado()) {
+                if (!ptr->getEstado())
+                {
                     ptr->setPosicion(ptr->getPosicionX() + moveSpeed, ptr->getPosicionY());
-                    if (ptr->getPosicionX() > SCREEN_W) {
+                    if (ptr->getPosicionX() > SCREEN_W) 
+                    {
                         ptr->setEstado(true);
                         ptr->setPosicion(carrilesX[rand() % 3], -60);
                     }
                 }
-                else {
+                else 
+                {
                     ptr->setPosicion(ptr->getPosicionX(), ptr->getPosicionY() + moveSpeed);
-                    if (ptr->getPosicionY() > SCREEN_H) {
+                    if (ptr->getPosicionY() > SCREEN_H)
+                    {
                         ptr->setEstado(false);
                         ptr->setPosicion(-100, carrilesY[rand() % 3]);
                     }
@@ -330,7 +343,8 @@ int main() {
 
             dibujarAutos(autos);
 
-            if (imgPeaje) {
+            if (imgPeaje) 
+            {
                 int pw = al_get_bitmap_width(imgPeaje);
                 int ph = al_get_bitmap_height(imgPeaje);
                 const float targetW = 180.0f;                 
@@ -338,7 +352,8 @@ int main() {
                 const float heightScale = 0.6f;                
                 const float targetH = static_cast<float>(ph) * scale * heightScale;
                 const auto& cabinas = sim.getCabinas();
-                if (!cabinas.empty()) {
+                if (!cabinas.empty()) 
+                {
                     const auto& cab = cabinas.front();              
                     const float offsetY = 146.0f;                      // bajar la imagen de peaje
                     const float offsetX = 80.0f;                       // mover a la derecha de peaje

@@ -175,6 +175,12 @@ void Carro::setImg(ALLEGRO_BITMAP* pImg)
 
 /*
 * Método para avanzar el carro en función de su velocidad y el tiempo transcurrido
+* Observación: Actualiza la posición X o Y según la orientación del carro
+* @param:
+*   - float pVelocidad: Velocidad del carro
+*   - float pTiempo: Tiempo transcurrido
+* @return:
+*   + Ninguno
 */
 void Carro::avanzar(float pVelocidad, float pTiempo)
 {
@@ -209,6 +215,14 @@ float Carro::getTiempoSalida() const { return tiempoSalida; }
 void Carro::setTiempoServicioAsignado(float t) { tiempoServicioAsignado = t; }
 float Carro::getTiempoServicioAsignado() const { return tiempoServicioAsignado; }
 
+/*
+* Método para decidir a qué cabina de peaje ir
+* Observación: Selecciona la cabina con la cola más corta
+* @param:
+*   - const std::vector<CabinaPeaje>& cabinas: Vector de cabinas disponibles
+* @return:
+*   + int: Índice de la cabina seleccionada
+*/
 int Carro::decidirCabina(const std::vector<CabinaPeaje>& cabinas) const {
     int mejor = 0;
     int tamMejor = cabinas.empty() ? 0 : cabinas[0].colaSize();

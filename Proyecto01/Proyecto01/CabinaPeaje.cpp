@@ -3,6 +3,7 @@
 #include <random>
 #include <vector>
 
+
 CabinaPeaje::CabinaPeaje(float pMin, float pMax, float px, float py, float pSpacing)
     : ocupada(false), tiempoRestanteServicio(0.0f),
     tiempoTotalOcupada(0.0f), cantidadCarrosAtendidos(0),
@@ -12,6 +13,14 @@ CabinaPeaje::CabinaPeaje(float pMin, float pMax, float px, float py, float pSpac
 {
 }
 
+/*
+* Metodo para reposicionar los carros en la cola de la cabina de peaje
+* Observación: Recalcula las posiciones de los carros en la cola basándose en su orden
+* @param:
+*   - Ninguno
+* @return:
+*   + Ninguno
+*/
 void CabinaPeaje::reposicionarCola() {
     std::vector<std::shared_ptr<Carro>> temp;
     while (!cola.empty()) {
