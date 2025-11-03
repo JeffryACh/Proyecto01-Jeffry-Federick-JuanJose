@@ -1,7 +1,11 @@
 #pragma once
 #include <string>
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
 #include <vector>
+#include <cmath>
+#include <algorithm>
+#include "CabinaPeaje.h" 
 
 
 class CabinaPeaje;
@@ -53,10 +57,10 @@ public:
     float getPeajeCooldown() const;
 
     // implementar decidirCabina (ya lo tenías pendiente)
-    int decidirCabina(const std::vector<CabinaPeaje>& cabinas) const;
+    int decidirCabina(const vector<CabinaPeaje>& cabinas) const;
 
     Carro();
-    Carro(bool pEstado, int pColor, const std::string& pPlaca);
+    Carro(bool pEstado, int pColor, const string& pPlaca);
 
     void dibujar();
 
@@ -85,6 +89,7 @@ public:
     void setImg(ALLEGRO_BITMAP* pImg);
 
     // Métodos
+	string generarPlacaAleatoria() const;
     void decidirCabina();
     void avanzar(float pVelocidad, float pTiempo);
 };

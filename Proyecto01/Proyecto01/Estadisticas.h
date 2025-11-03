@@ -2,10 +2,15 @@
 #include <vector>
 #include <string>
 #include <tuple>
+#include <fstream>
+#include <iomanip>
+#include <algorithm>
+
+using namespace std;
 
 class Estadisticas {
 private:
-    std::vector<std::tuple<int, float, float, float, float>> registros;
+	vector<tuple<int, float, float, float, float>> registros; // id, tiempoGeneracion, tiempoLlegadaCola, tiempoInicioServicio, tiempoSalida
 
     float tiempoSimTotal; 
 public:
@@ -14,7 +19,7 @@ public:
     void registrarLlegadaCola(int id, float tiempoLlegada);
     void registrarInicioServicio(int id, float tiempoInicio); 
     void registrarSalida(int id, float tiempoSalida, float tiempoServicioAsignado);
-    void generarCSV(const std::string& nombreArchivo);
+    void generarCSV(const string& nombreArchivo);
     int totalProcesados() const;
     float tiempoPromedioEspera() const;
     float tiempoPromedioSistema() const;

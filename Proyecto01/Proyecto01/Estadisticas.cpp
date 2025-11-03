@@ -1,7 +1,4 @@
 #include "Estadisticas.h"
-#include <fstream>
-#include <iomanip>
-#include <algorithm>
 
 Estadisticas::Estadisticas() : tiempoSimTotal(0.0f) {}
 
@@ -32,9 +29,9 @@ void Estadisticas::registrarLlegadaCola(int id, float tiempoLlegada)
 {
     for (auto& r : registros) 
     {
-        if (std::get<0>(r) == id) 
+        if (get<0>(r) == id) 
         {
-            std::get<2>(r) = tiempoLlegada;
+            get<2>(r) = tiempoLlegada;
             break;
         }
     }
@@ -68,10 +65,10 @@ void Estadisticas::registrarSalida(int id, float tiempoSalida, float tiempoServi
 {
     for (auto& r : registros) 
     {
-        if (std::get<0>(r) == id) 
+        if (get<0>(r) == id) 
         {
-            std::get<3>(r) = tiempoSalida;
-            std::get<4>(r) = tiempoServicioAsignado;
+            get<3>(r) = tiempoSalida;
+            get<4>(r) = tiempoServicioAsignado;
             break;
         }
     }
@@ -85,18 +82,18 @@ void Estadisticas::registrarSalida(int id, float tiempoSalida, float tiempoServi
 * @return:
 *   + Ninguno
 */
-void Estadisticas::generarCSV(const std::string& nombreArchivo) 
+void Estadisticas::generarCSV(const string& nombreArchivo) 
 {
-    std::ofstream ofs(nombreArchivo);
+    ofstream ofs(nombreArchivo);
     ofs << "ID,TiempoGenerado,TiempoLlegadaCola,TiempoSalida,TiempoServicio\n";
-    ofs << std::fixed << std::setprecision(3);
+    ofs << fixed << setprecision(3);
     for (auto& r : registros)
     {
-        ofs << std::get<0>(r) << ","
-            << std::get<1>(r) << ","
-            << std::get<2>(r) << ","
-            << std::get<3>(r) << ","
-            << std::get<4>(r) << "\n";
+        ofs << get<0>(r) << ","
+            << get<1>(r) << ","
+            << get<2>(r) << ","
+            << get<3>(r) << ","
+            << get<4>(r) << "\n";
     }
     ofs.close();
 }
@@ -112,7 +109,7 @@ void Estadisticas::generarCSV(const std::string& nombreArchivo)
 int Estadisticas::totalProcesados() const 
 {
     int cnt = 0;
-    for (auto& r : registros) if (std::get<3>(r) >= 0.0f) ++cnt;
+    for (auto& r : registros) if (get<3>(r) >= 0.0f) ++cnt;
     return cnt;
 }
 
@@ -129,9 +126,9 @@ float Estadisticas::tiempoPromedioEspera() const
     float total = 0.0f; int cnt = 0;
     for (auto& r : registros) 
     {
-        float llegada = std::get<2>(r);
-        float salida = std::get<3>(r);
-        float servicio = std::get<4>(r);
+        float llegada = get<2>(r);
+        float salida = get<3>(r);
+        float servicio = get<4>(r);
         if (llegada >= 0 && salida >= 0) 
         {
             float espera = (salida - llegada) - servicio;
@@ -155,8 +152,8 @@ float Estadisticas::tiempoPromedioSistema() const
     float total = 0.0f; int cnt = 0;
     for (auto& r : registros) 
     {
-        float gen = std::get<1>(r);
-        float salida = std::get<3>(r);
+        float gen = get<1>(r);
+        float salida = get<3>(r);
         if (salida >= 0)
         {
             total += (salida - gen);

@@ -230,7 +230,7 @@ int main()
         imgPeaje = nullptr;
     }
 
-    std::vector<std::shared_ptr<Carro>> autos;
+    vector<shared_ptr<Carro>> autos;
     srand(time(nullptr));
 
     float carrilesY[] = { 260, 290, 320 };
@@ -238,7 +238,7 @@ int main()
 
     for (int i = 0; i < 8; i++) 
     {
-        auto a = std::make_shared<Carro>();
+        auto a = make_shared<Carro>();
         a->setColor(rand() % 4);
         switch (a->getColor()) 
         {
@@ -257,13 +257,13 @@ int main()
         if (horizontal) 
         {
             a->setDimension(60.0f, 30.0f);
-            int maxX = std::max(50, SCREEN_W - 400); 
+            int maxX = max(50, SCREEN_W - 400); 
             a->setPosicion(static_cast<float>(rand() % maxX), carrilesY[rand() % 3]);
         }
         else 
         {
             a->setDimension(30.0f, 60.0f);
-            int maxY = std::max(50, SCREEN_H - 200);
+            int maxY = max(50, SCREEN_H - 200);
             a->setPosicion(carrilesX[rand() % 3], static_cast<float>(rand() % maxY));
         }
 
@@ -372,7 +372,7 @@ int main()
             al_flip_display();
         }
     }
-    sim.getEstadisticas().generarCSV("toll_simulation_log.csv");
+    sim.getEstadisticas().generarCSV("DatosGenerales.csv");
 
 
     al_destroy_bitmap(fondo);

@@ -1,14 +1,17 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include <cstdlib>
+#include <ctime>
+#include <algorithm>
 #include "Carro.h"
 #include "CabinaPeaje.h"
 #include "Estadisticas.h"
 
 class Simulador {
 private:
-    std::vector<std::shared_ptr<Carro>> vehiculos; 
-    std::vector<CabinaPeaje> cabinas;
+    vector<shared_ptr<Carro>> vehiculos; 
+    vector<CabinaPeaje> cabinas;
     Estadisticas estad;
     float tiempoSim; 
     int nextId;
@@ -25,10 +28,10 @@ public:
     Estadisticas& getEstadisticas() { return estad; }
     float getTiempoSim() const { return tiempoSim; }
     int getNextId() { return nextId++; }
-    void agregarVehiculo(std::shared_ptr<Carro> nuevo);
+    void agregarVehiculo(shared_ptr<Carro> nuevo);
 
 
-    const std::vector<CabinaPeaje>& getCabinas() const;
+    const vector<CabinaPeaje>& getCabinas() const;
 };
 
 

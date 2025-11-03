@@ -1,7 +1,4 @@
 #include "CabinaPeaje.h"
-#include "Estadisticas.h"
-#include <random>
-#include <vector>
 
 
 CabinaPeaje::CabinaPeaje(float pMin, float pMax, float px, float py, float pSpacing)
@@ -22,7 +19,7 @@ CabinaPeaje::CabinaPeaje(float pMin, float pMax, float px, float py, float pSpac
 *   + Ninguno
 */
 void CabinaPeaje::reposicionarCola() {
-    std::vector<std::shared_ptr<Carro>> temp;
+    vector<shared_ptr<Carro>> temp;
     while (!cola.empty()) {
         temp.push_back(cola.front());
         cola.pop();
@@ -43,7 +40,7 @@ void CabinaPeaje::reposicionarCola() {
     }
 }
 
-void CabinaPeaje::encolar(std::shared_ptr<Carro> carro) {
+void CabinaPeaje::encolar(shared_ptr<Carro> carro) {
     if (!carro) return;
     carro->setCabinaAsignada(this);
     cola.push(carro);
@@ -59,7 +56,7 @@ bool CabinaPeaje::estaOcupada() const {
     return ocupada;
 }
 
-void CabinaPeaje::iniciarServicio(std::shared_ptr<Carro> carro, float servicioAsignado, float tiempoSim, Estadisticas& estad) {
+void CabinaPeaje::iniciarServicio(shared_ptr<Carro> carro, float servicioAsignado, float tiempoSim, Estadisticas& estad) {
     if (!carro) return;
     ocupada = true;
     tiempoRestanteServicio = servicioAsignado;
@@ -90,10 +87,10 @@ void CabinaPeaje::actualizar(float dt, float tiempoSim, Estadisticas& estad) {
 
 
     if (!ocupada && !cola.empty()) {
-        std::shared_ptr<Carro> siguiente = cola.front();
+        shared_ptr<Carro> siguiente = cola.front();
         cola.pop();
-        static std::mt19937 rng((std::random_device())());
-        std::uniform_real_distribution<float> dist(tiempoAtencionMin, tiempoAtencionMax);
+        static mt19937 rng((random_device())());
+        uniform_real_distribution<float> dist(tiempoAtencionMin, tiempoAtencionMax);
         float servicio = dist(rng);
         iniciarServicio(siguiente, servicio, tiempoSim, estad);
 

@@ -1,8 +1,4 @@
 #include "Simulador.h"
-#include <cstdlib>
-#include <ctime>
-#include <algorithm>
-#include <memory>
 
 /*
 * Constructor de la clase Simulador
@@ -47,7 +43,7 @@ Simulador::~Simulador()
 * @return:
 *   + Ninguno
 */
-void Simulador::agregarVehiculo(std::shared_ptr<Carro> nuevo) 
+void Simulador::agregarVehiculo(shared_ptr<Carro> nuevo) 
 {
     if (nuevo != nullptr) 
     {
@@ -70,7 +66,7 @@ void Simulador::generarVehiculosAleatorios(float dt)
     float r = static_cast<float>(rand()) / RAND_MAX;
     if (r < pTick) 
     {
-        auto c = std::make_shared<Carro>();
+        auto c = make_shared<Carro>();
         c->setId(nextId++);
         c->setTiempoGenerado(tiempoSim);
         c->setTiempo(tiempoSim); 
@@ -135,11 +131,11 @@ void Simulador::actualizar(float dt)
     {
         float cd = v->getPeajeCooldown();
         if (cd > 0.0f) 
-            v->setPeajeCooldown(std::max(0.0f, cd - dt));
+            v->setPeajeCooldown(max(0.0f, cd - dt));
 
         float wt = v->getWaitTimer();
         if (wt > 0.0f) 
-            v->setWaitTimer(std::max(0.0f, wt - dt));
+            v->setWaitTimer(max(0.0f, wt - dt));
 
         if (v->getCabinaAsignada() == nullptr && v->getPeajeCooldown() <= 0.0f)
         {
@@ -164,9 +160,9 @@ void Simulador::actualizar(float dt)
 * @param:
 *   - Ninguno
 * @return:
-*   + const std::vector<CabinaPeaje>&: Referencia constante al vector de cabinas de peaje
+*   + const vector<CabinaPeaje>&: Referencia constante al vector de cabinas de peaje
 */
-const std::vector<CabinaPeaje>& Simulador::getCabinas() const 
+const vector<CabinaPeaje>& Simulador::getCabinas() const 
 {
     return cabinas;
 }

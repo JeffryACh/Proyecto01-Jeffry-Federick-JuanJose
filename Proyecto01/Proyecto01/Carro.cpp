@@ -1,16 +1,10 @@
 #include "Carro.h"
-#include "CabinaPeaje.h" 
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_image.h>
-#include <cmath>
-#include <algorithm>
-#include <vector>
 
 /*
 * Implementación de la clase Carro
 */
 
-Carro::Carro() : orientacion(false), estado(true), color(0), placa("AAA-000"),
+Carro::Carro() : orientacion(false), estado(true), color(0), placa(generarPlacaAleatoria()),
                  velocidad(0), posicionX(0), posicionY(0),
                  ancho(60), alto(30), tiempo(0), img(nullptr), waitTimer(0.0f),
                  peajeCooldown(0.0f),
@@ -21,7 +15,7 @@ Carro::Carro() : orientacion(false), estado(true), color(0), placa("AAA-000"),
 /*
 * Constructor parametrizado
 */
-Carro::Carro(bool pEstado, int pColor, const std::string& pPlaca)
+Carro::Carro(bool pEstado, int pColor, const string& pPlaca)
     : orientacion(false), estado(pEstado), color(pColor), placa(pPlaca),
       velocidad(0), posicionX(0), posicionY(0),
       ancho(60), alto(30), tiempo(0), img(nullptr), waitTimer(0.0f),
@@ -48,8 +42,8 @@ void Carro::dibujar()
 
     float angle = getEstado() ? ALLEGRO_PI / 2.0f : 0.0f;
 
-    float origLong = std::max(origW, origH);
-    float targetLong = std::max(targetW, targetH);
+    float origLong = max(origW, origH);
+    float targetLong = max(targetW, targetH);
     float scale = (origLong > 0.0f) ? (targetLong / origLong) : 1.0f;
 
     float destCx = getPosicionX() + getAncho() * 0.5f;
@@ -219,11 +213,11 @@ float Carro::getTiempoServicioAsignado() const { return tiempoServicioAsignado; 
 * Método para decidir a qué cabina de peaje ir
 * Observación: Selecciona la cabina con la cola más corta
 * @param:
-*   - const std::vector<CabinaPeaje>& cabinas: Vector de cabinas disponibles
+*   - const vector<CabinaPeaje>& cabinas: Vector de cabinas disponibles
 * @return:
 *   + int: Índice de la cabina seleccionada
 */
-int Carro::decidirCabina(const std::vector<CabinaPeaje>& cabinas) const {
+int Carro::decidirCabina(const vector<CabinaPeaje>& cabinas) const {
     int mejor = 0;
     int tamMejor = cabinas.empty() ? 0 : cabinas[0].colaSize();
     for (size_t i = 1; i < cabinas.size(); ++i) {
@@ -234,4 +228,25 @@ int Carro::decidirCabina(const std::vector<CabinaPeaje>& cabinas) const {
         }
     }
     return mejor;
+}
+
+/*
+* Método para generar una placa aleatoria
+* Observación: La placa tiene el formato 3 letras '-' 3 números
+* @param:
+*   - Ninguno
+* @return:
+*   + string: Placa generada aleatoriamente
+*/
+string Carro::generarPlacaAleatoria() const
+{
+    const string letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const string numeros = "0123456789";
+    string placaGenerada;
+    for (int i = 0; i < 3; ++i)
+        placaGenerada += letras[rand() % letras.size()];
+    placaGenerada += '-';
+    for (int i = 0; i < 3; ++i)
+        placaGenerada += numeros[rand() % numeros.size()];
+    return placaGenerada;
 }
