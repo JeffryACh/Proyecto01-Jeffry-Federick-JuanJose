@@ -172,6 +172,48 @@ void resolverSolapamientos(vector<shared_ptr<Carro>>& autos)
     }
 }
 
+/*
+* Método para generar una placa aleatoria
+* Observación: La placa tiene el formato 3 letras '-' 3 números
+* @param:
+*   - Ninguno
+* @return:
+*   + string: Placa generada aleatoriamente
+*/
+string generarPlacaAleatoria() 
+{
+    string letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    string numeros = "0123456789";
+    string placaGenerada;
+    for (int i = 0; i < 3; ++i)
+        placaGenerada += letras[rand() % letras.size()];
+    placaGenerada += '-';
+    for (int i = 0; i < 3; ++i)
+        placaGenerada += numeros[rand() % numeros.size()];
+    return placaGenerada;
+}
+
+/*
+* Función para verificar si una placa ya existe en un vector de carros
+* Observación: Recorre el vector y compara las placas
+* @param:
+*   - const string& placa: Placa a verificar
+*   - const vector<shared_ptr<Carro>>& autos: Vector de carros
+* @return:
+*   + bool: true si la placa existe, false en caso contrario
+*/
+bool exisePlaca(const string& placa, const vector<shared_ptr<Carro>>& autos)
+{
+    for (const auto& a : autos)
+    {
+        if (a->getPlaca() == placa)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 int main() 
 {
 
@@ -266,6 +308,13 @@ int main()
             int maxY = max(50, SCREEN_H - 200);
             a->setPosicion(carrilesX[rand() % 3], static_cast<float>(rand() % maxY));
         }
+
+		string placa = generarPlacaAleatoria();
+        while (exisePlaca(placa, autos))
+			placa = generarPlacaAleatoria();
+		
+
+		a->setPlaca(placa);
 
         autos.push_back(a);
         sim.agregarVehiculo(a);
@@ -372,6 +421,7 @@ int main()
             al_flip_display();
         }
     }
+	sim.getEstadisticas().generarDatosVehiculos("DatosVehiculos.csv");
     sim.getEstadisticas().generarCSV("DatosGenerales.csv");
 
 

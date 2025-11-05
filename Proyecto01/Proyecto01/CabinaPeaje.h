@@ -44,3 +44,5 @@ public:
     float getPosX() const;
     float getPosY() const;
 };
+
+string obtenerColorCarro(shared_ptr<Carro> nuevo);

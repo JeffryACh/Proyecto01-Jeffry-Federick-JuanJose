@@ -48,7 +48,7 @@ void Simulador::agregarVehiculo(shared_ptr<Carro> nuevo)
     if (nuevo != nullptr) 
     {
         vehiculos.push_back(nuevo);
-        estad.registrarGeneracion(nuevo->getId(), tiempoSim);
+        estad.registrarGeneracion(nuevo->getId(), tiempoSim, nuevo->getPlaca(), nuevo->getEstado(), obtenerColorCarro(nuevo));
     }
 }
 
@@ -71,7 +71,7 @@ void Simulador::generarVehiculosAleatorios(float dt)
         c->setTiempoGenerado(tiempoSim);
         c->setTiempo(tiempoSim); 
         vehiculos.push_back(c);
-        estad.registrarGeneracion(c->getId(), tiempoSim);
+        estad.registrarGeneracion(c->getId(), tiempoSim, c->getPlaca(), c->getEstado(), obtenerColorCarro(c));
     }
 }
 
@@ -92,7 +92,7 @@ void Simulador::procesarFinalizados(float dt)
             if (v->getWaitTimer() <= 0.0f && v->getTiempoServicioAsignado() > 0.0f) 
             {
                 v->setTiempoSalida(tiempoSim);
-                estad.registrarSalida(v->getId(), tiempoSim, v->getTiempoServicioAsignado());
+                estad.registrarSalida(v->getId(), tiempoSim, v->getTiempoServicioAsignado(), v->getPlaca(), v->getEstado(), obtenerColorCarro(v));
                 v->setCabinaAsignada(nullptr);
                 v->setTiempoServicioAsignado(0.0f);
                 v->setPeajeCooldown(3.0f);
@@ -144,7 +144,7 @@ void Simulador::actualizar(float dt)
                 int idx = v->decidirCabina(cabinas);
                 cabinas[idx].encolar(v);
                 v->setTiempoLlegadaCola(tiempoSim);
-                estad.registrarLlegadaCola(v->getId(), tiempoSim);
+                estad.registrarLlegadaCola(v->getId(), tiempoSim, v->getPlaca(), v->getEstado(), obtenerColorCarro(v));
             }
         }
     }
@@ -165,4 +165,37 @@ void Simulador::actualizar(float dt)
 const vector<CabinaPeaje>& Simulador::getCabinas() const 
 {
     return cabinas;
+}
+
+/*
+* Función para obtener el color del carro en formato de cadena
+* Observación: Convierte el valor entero del color del carro a una representación de cadena
+* @param:
+*   - int color: Valor entero del color del carro
+*   - shared_ptr<Carro> nuevo: Puntero compartido al carro
+* @return:
+*   + string: Representación de cadena del color del carro
+*/
+string obtenerColorCarro(shared_ptr<Carro> nuevo)
+{
+    string color;
+    switch (nuevo->getColor())
+    {
+    case 0:
+        color = "Amarillo";
+        break;
+    case 1:
+        color = "Rojo";
+        break;
+    case 2:
+        color = "Azul";
+        break;
+    case 3:
+        color = "Verde";
+        break;
+    default:
+        color = "Desconocido";
+        break;
+    }
+	return color;
 }

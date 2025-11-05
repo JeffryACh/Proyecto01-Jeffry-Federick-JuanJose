@@ -8,12 +8,16 @@ Estadisticas::Estadisticas() : tiempoSimTotal(0.0f) {}
 * @param:
 *   - int id: ID del carro generado
 *   - float tiempoGen: Tiempo de generación del carro
+*   - string placa: Placa del carro
+*   - bool estado: Estado del carro (en pantalla o fuera de pantalla)
+*   - string color: Color del carro
 * @return:
 *   + Ninguno
 */
-void Estadisticas::registrarGeneracion(int id, float tiempoGen)
+void Estadisticas::registrarGeneracion(int id, float tiempoGen, string placa, bool estado, string color)
 {
     registros.emplace_back(id, tiempoGen, -1.0f, -1.0f, -1.0f);
+	datosVehiculos.emplace_back(placa, estado, color);
 }
 
 /*
@@ -22,10 +26,13 @@ void Estadisticas::registrarGeneracion(int id, float tiempoGen)
 * @param:
 *   - int id: ID del carro que llega a la cola
 *   - float tiempoLlegada: Tiempo de llegada del carro a la cola
+*   - string placa: Placa del carro
+*   - bool estado: Estado del carro (en pantalla o fuera de pantalla)
+*   - string color: Color del carro
 * @return:
 *   + Ninguno
 */
-void Estadisticas::registrarLlegadaCola(int id, float tiempoLlegada) 
+void Estadisticas::registrarLlegadaCola(int id, float tiempoLlegada, string placa, bool estado, string color)
 {
     for (auto& r : registros) 
     {
@@ -35,6 +42,15 @@ void Estadisticas::registrarLlegadaCola(int id, float tiempoLlegada)
             break;
         }
     }
+    for (auto& d : datosVehiculos) 
+    {
+        if (get<0>(d) == placa) 
+        {
+            get<1>(d) = estado;
+            get<2>(d) = color;
+            break;
+        }
+	}
 }
 
 /*
@@ -43,12 +59,16 @@ void Estadisticas::registrarLlegadaCola(int id, float tiempoLlegada)
 * @param:
 *   - int id: ID del carro que inicia el servicio
 *   - float tiempoInicio: Tiempo de inicio del servicio
+*   - string placa: Placa del carro
+*   - bool estado: Estado del carro (en pantalla o fuera de pantalla)
+*   - string color: Color del carro
 * @return:
 *   + Ninguno
 */
-void Estadisticas::registrarInicioServicio(int id, float tiempoInicio) 
+void Estadisticas::registrarInicioServicio(int id, float tiempoInicio, string placa, bool estado, string color)
 {
     (void)id; (void)tiempoInicio;
+	(void)placa; (void)estado; (void)color;
 }
 
 /*
@@ -58,10 +78,13 @@ void Estadisticas::registrarInicioServicio(int id, float tiempoInicio)
 *   - int id: ID del carro que sale del peaje
 *   - float tiempoSalida: Tiempo de salida del carro del peaje
 *   - float tiempoServicioAsignado: Tiempo de servicio asignado al carro
+*   - string placa: Placa del carro
+*   - bool estado: Estado del carro (en pantalla o fuera de pantalla)
+*   - string color: Color del carro
 * @return:
 *   + Ninguno
 */
-void Estadisticas::registrarSalida(int id, float tiempoSalida, float tiempoServicioAsignado) 
+void Estadisticas::registrarSalida(int id, float tiempoSalida, float tiempoServicioAsignado, string placa, bool estado, string color)
 {
     for (auto& r : registros) 
     {
@@ -69,6 +92,15 @@ void Estadisticas::registrarSalida(int id, float tiempoSalida, float tiempoServi
         {
             get<3>(r) = tiempoSalida;
             get<4>(r) = tiempoServicioAsignado;
+            break;
+        }
+    }
+    for (auto& d : datosVehiculos)
+    {
+        if (get<0>(d) == placa)
+        {
+            get<1>(d) = estado;
+            get<2>(d) = color;
             break;
         }
     }
@@ -94,6 +126,27 @@ void Estadisticas::generarCSV(const string& nombreArchivo)
             << get<2>(r) << ","
             << get<3>(r) << ","
             << get<4>(r) << "\n";
+    }
+    ofs.close();
+}
+
+/*
+* Método para generar un archivo CSV con los datos de los vehículos
+* Observación: El archivo CSV contendrá columnas como placa, estado y color del vehículo
+* @param:
+*   - const string& pNombreArchivo: Nombre del archivo CSV a generar
+* @return:
+*   + Ninguno
+*/
+void Estadisticas::generarDatosVehiculos(const string& nombreArchivo) 
+{
+    ofstream ofs(nombreArchivo);
+    ofs << "Placa,Estado,Color\n";
+    for (auto& d : datosVehiculos) 
+    {
+        ofs << get<0>(d) << ","
+            << (get<1>(d) ? "En Pantalla" : "Fuera de Pantalla") << ","
+            << get<2>(d) << "\n";
     }
     ofs.close();
 }

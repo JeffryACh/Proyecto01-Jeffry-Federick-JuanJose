@@ -61,7 +61,7 @@ void CabinaPeaje::iniciarServicio(shared_ptr<Carro> carro, float servicioAsignad
     ocupada = true;
     tiempoRestanteServicio = servicioAsignado;
     cantidadCarrosAtendidos++;
-    estad.registrarInicioServicio(carro->getId(), tiempoSim);
+    estad.registrarInicioServicio(carro->getId(), tiempoSim, carro->getPlaca(), carro->getEstado(), obtenerColorCarro(carro));
     enServicio = carro;
     carro->setTiempoServicioAsignado(servicioAsignado);
     carro->setWaitTimer(servicioAsignado);

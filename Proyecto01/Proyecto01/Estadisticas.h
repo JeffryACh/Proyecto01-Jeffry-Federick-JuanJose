@@ -11,15 +11,17 @@ using namespace std;
 class Estadisticas {
 private:
 	vector<tuple<int, float, float, float, float>> registros; // id, tiempoGeneracion, tiempoLlegadaCola, tiempoInicioServicio, tiempoSalida
+	vector<tuple<string, bool, string>> datosVehiculos; // Datos de vehículos: placa, estado, color
 
     float tiempoSimTotal; 
 public:
     Estadisticas();
-    void registrarGeneracion(int id, float tiempoGen);
-    void registrarLlegadaCola(int id, float tiempoLlegada);
-    void registrarInicioServicio(int id, float tiempoInicio); 
-    void registrarSalida(int id, float tiempoSalida, float tiempoServicioAsignado);
+    void registrarGeneracion(int id, float tiempoGen, string placa, bool estado, string color);
+    void registrarLlegadaCola(int id, float tiempoLlegada, string placa, bool estado, string color);
+    void registrarInicioServicio(int id, float tiempoInicio, string placa, bool estado, string color);
+    void registrarSalida(int id, float tiempoSalida, float tiempoServicioAsignado, string placa, bool estado, string color);
     void generarCSV(const string& nombreArchivo);
+	void generarDatosVehiculos(const string& nombreArchivo);
     int totalProcesados() const;
     float tiempoPromedioEspera() const;
     float tiempoPromedioSistema() const;

@@ -89,7 +89,6 @@ public:
     void setImg(ALLEGRO_BITMAP* pImg);
 
     // Métodos
-	string generarPlacaAleatoria() const;
     void decidirCabina();
     void avanzar(float pVelocidad, float pTiempo);
 };

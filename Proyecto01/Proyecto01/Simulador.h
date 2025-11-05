@@ -34,4 +34,4 @@ public:
     const vector<CabinaPeaje>& getCabinas() const;
 };
 
-
+string obtenerColorCarro(shared_ptr<Carro> nuevo);
