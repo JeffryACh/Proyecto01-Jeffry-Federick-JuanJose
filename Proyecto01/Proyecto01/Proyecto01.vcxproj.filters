@@ -86,4 +86,9 @@
       <Filter>Archivos de encabezado\Clases</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="DatosGenerales.csv">
+      <Filter>Archivos de recursos</Filter>
+    </None>
+  </ItemGroup>
 </Project>

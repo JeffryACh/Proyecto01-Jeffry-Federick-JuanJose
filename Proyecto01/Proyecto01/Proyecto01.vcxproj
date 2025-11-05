@@ -41,6 +41,9 @@
     <ClInclude Include="Estadisticas.h" />
     <ClInclude Include="Simulador.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="DatosGenerales.csv" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
