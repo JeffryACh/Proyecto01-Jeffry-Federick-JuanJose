@@ -28,6 +28,11 @@ Carro::Carro(bool pEstado, int pColor, const string& pPlaca)
 * Método para dibujar el carro en la pantalla
 * Escala uniforme basada en la arista mayor (max ancho/alto) para que todas las
 * imágenes tengan la misma «presencia» visual sin deformarse.
+* Observación: Rota la imagen 90 grados si el carro está en estado vertical
+* @param:
+*   - Ninguno
+* @return:
+*   + Ninguno
 */
 void Carro::dibujar()
 {
@@ -217,12 +222,15 @@ float Carro::getTiempoServicioAsignado() const { return tiempoServicioAsignado; 
 * @return:
 *   + int: Índice de la cabina seleccionada
 */
-int Carro::decidirCabina(const vector<CabinaPeaje>& cabinas) const {
+int Carro::decidirCabina(const vector<CabinaPeaje>& cabinas) const
+{
     int mejor = 0;
     int tamMejor = cabinas.empty() ? 0 : cabinas[0].colaSize();
-    for (size_t i = 1; i < cabinas.size(); ++i) {
+    for (size_t i = 1; i < cabinas.size(); ++i) 
+    {
         int tam = cabinas[i].colaSize();
-        if (tam < tamMejor) {
+        if (tam < tamMejor)
+        {
             mejor = static_cast<int>(i);
             tamMejor = tam;
         }

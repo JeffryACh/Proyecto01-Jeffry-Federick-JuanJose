@@ -142,6 +142,7 @@ void Estadisticas::generarDatosVehiculos(const string& nombreArchivo)
 {
     ofstream ofs(nombreArchivo);
     ofs << "Placa,Estado,Color\n";
+	ofs << fixed << setprecision(3);
     for (auto& d : datosVehiculos) 
     {
         ofs << get<0>(d) << ","

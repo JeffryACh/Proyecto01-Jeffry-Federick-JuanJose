@@ -40,6 +40,15 @@ hay q hacer:
 -carro amarillo (cambiar tamaño) (hecho)
 -Estadisticas visuales 
 */
+
+/*
+* Dibuja el fondo escalado a la pantalla
+* Observación: Utiliza al_draw_scaled_bitmap para ajustar la imagen al tamaño de la ventana
+* @param:
+*   - ALLEGRO_BITMAP* fondo: Puntero a la imagen del fondo
+* @return:
+*   + Ninguno
+*/
 void dibujarFondo(ALLEGRO_BITMAP* fondo) 
 {
     al_draw_scaled_bitmap(
@@ -49,12 +58,32 @@ void dibujarFondo(ALLEGRO_BITMAP* fondo)
         0
     );
 }
+
+/*
+* Dibuja todos los autos en la pantalla
+* Observación: Itera sobre el vector de autos y llama al método dibujar de cada auto
+* @param:
+*   - const vector<shared_ptr<Carro>>& autos: Vector de punteros compartidos a los autos
+* @return:
+*   + Ninguno
+*/
 void dibujarAutos(const vector<shared_ptr<Carro>>& autos) 
 {
     for (const auto& a : autos)
         a->dibujar();
 }
 
+/*
+* Verifica si hay un carro adelante del carro actual
+* Observación: Compara la posición del carro actual con la de los otros carros en el mismo carril
+* @param:
+*   - const Carro& actual: Referencia al carro actual
+*   - const vector<shared_ptr<Carro>>& autos: Vector de punteros compartidos a los autos
+*   - float distanciaMinima: Distancia mínima para considerar que hay un carro adelante
+*   - float toleranciaCarril: Tolerancia para determinar si están en el mismo carril
+* @return:
+*   + bool: true si hay un carro adelante, false en caso contrario
+*/
 bool hayCarroAdelante(const Carro& actual, const vector<shared_ptr<Carro>>& autos, float distanciaMinima, float toleranciaCarril)
 {
     if (!actual.getEstado())
@@ -101,7 +130,14 @@ bool hayCarroAdelante(const Carro& actual, const vector<shared_ptr<Carro>>& auto
     return false;
 }
 
-
+/*
+* Resuelve solapamientos entre autos
+* Observación: Ajusta las posiciones de los autos para evitar solapamientos
+* @param:
+*   - vector<shared_ptr<Carro>>& autos: Vector de punteros compartidos a los autos
+* @return:
+*   + Ninguno
+*/
 void resolverSolapamientos(vector<shared_ptr<Carro>>& autos)
 {
     const float toleranciaCarril = 12.0f;
