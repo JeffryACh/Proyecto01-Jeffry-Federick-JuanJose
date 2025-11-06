@@ -1,9 +1,9 @@
 ID,TiempoGenerado,TiempoLlegadaCola,TiempoSalida,TiempoServicio,Estado,Placa,Color
-1,0.000,4.283,-1.000,-1.000,Fuera de Pantalla,QBT-893,Azul
-2,0.000,-1.000,-1.000,-1.000,En Pantalla,IQO-011,Amarillo
-3,0.000,2.350,4.517,0.000,Fuera de Pantalla,MWJ-922,Rojo
-4,0.000,-1.000,-1.000,-1.000,Fuera de Pantalla,PEL-933,Azul
-5,0.000,-1.000,-1.000,-1.000,En Pantalla,NGC-088,Verde
-6,0.000,-1.000,-1.000,-1.000,En Pantalla,DBD-564,Amarillo
-7,0.000,-1.000,-1.000,-1.000,En Pantalla,GZB-924,Amarillo
-8,0.000,-1.000,-1.000,-1.000,En Pantalla,EVU-226,Rojo
+1,0.000,-1.000,-1.000,-1.000,En Pantalla,CYY-352,Verde
+2,0.000,-1.000,-1.000,-1.000,En Pantalla,UGF-097,Rojo
+3,0.000,-1.000,-1.000,-1.000,En Pantalla,JZZ-178,Rojo
+4,0.000,-1.000,-1.000,-1.000,En Pantalla,JZC-658,Amarillo
+5,0.000,-1.000,-1.000,-1.000,En Pantalla,RHV-362,Rojo
+6,0.000,1.800,-1.000,-1.000,Fuera de Pantalla,IJO-217,Rojo
+7,0.000,-1.000,-1.000,-1.000,En Pantalla,UZS-360,Amarillo
+8,0.000,-1.000,-1.000,-1.000,En Pantalla,YFD-921,Verde
