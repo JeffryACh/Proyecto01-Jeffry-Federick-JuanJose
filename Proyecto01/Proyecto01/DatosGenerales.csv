@@ -1,11 +1,9 @@
 ID,TiempoGenerado,TiempoLlegadaCola,TiempoSalida,TiempoServicio,Estado,Placa,Color
-1,0.000,49.449,22.000,0.000,En Pantalla,NAG-647,Rojo
-2,0.000,25.716,33.733,0.000,Fuera de Pantalla,RZO-774,Rojo
-3,0.000,49.933,29.150,0.000,Fuera de Pantalla,UNS-202,Rojo
-4,0.000,45.599,48.066,0.000,Fuera de Pantalla,AKE-011,Azul
-5,0.000,45.583,37.316,0.000,En Pantalla,WCQ-394,Amarillo
-6,0.000,34.166,41.066,0.000,Fuera de Pantalla,GZB-554,Rojo
-7,0.000,42.583,49.099,0.000,En Pantalla,YFL-439,Azul
-8,0.000,38.883,41.500,0.000,En Pantalla,KII-422,Verde
-9,0.533,30.850,38.333,0.000,En Pantalla,KYW-136,Rojo
-10,0.600,38.650,44.766,0.000,Fuera de Pantalla,UOV-261,Amarillo
+1,0.000,4.283,-1.000,-1.000,Fuera de Pantalla,QBT-893,Azul
+2,0.000,-1.000,-1.000,-1.000,En Pantalla,IQO-011,Amarillo
+3,0.000,2.350,4.517,0.000,Fuera de Pantalla,MWJ-922,Rojo
+4,0.000,-1.000,-1.000,-1.000,Fuera de Pantalla,PEL-933,Azul
+5,0.000,-1.000,-1.000,-1.000,En Pantalla,NGC-088,Verde
+6,0.000,-1.000,-1.000,-1.000,En Pantalla,DBD-564,Amarillo
+7,0.000,-1.000,-1.000,-1.000,En Pantalla,GZB-924,Amarillo
+8,0.000,-1.000,-1.000,-1.000,En Pantalla,EVU-226,Rojo
