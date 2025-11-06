@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="DatosGenerales.csv" />
+    <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

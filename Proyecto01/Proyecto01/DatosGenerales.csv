@@ -1,20 +1,69 @@
 ID,TiempoGenerado,TiempoLlegadaCola,TiempoSalida,TiempoServicio,Estado,Placa,Color
-1,0.000,2.100,4.400,2.285,Fuera de Pantalla,EMV-665,Rojo
-2,0.000,-1.000,-1.000,-1.000,Fuera de Pantalla,JPD-255,Azul
-3,0.000,9.450,13.667,4.200,En Pantalla,PIB-203,Azul
-4,0.000,11.733,-1.000,-1.000,En Pantalla,EDA-455,Amarillo
-5,0.000,-1.000,-1.000,-1.000,En Pantalla,MBE-067,Rojo
-6,0.000,-1.000,-1.000,-1.000,En Pantalla,SEM-425,Rojo
-7,0.000,-1.000,-1.000,-1.000,En Pantalla,YTH-596,Verde
-8,0.000,-1.000,-1.000,-1.000,En Pantalla,SDJ-321,Rojo
-9,1.150,-1.000,-1.000,-1.000,En Pantalla,UMX-474,Amarillo
-10,3.667,-1.000,-1.000,-1.000,En Pantalla,CPG-336,Azul
-11,3.983,-1.000,-1.000,-1.000,Fuera de Pantalla,HKB-368,Verde
-12,5.767,-1.000,-1.000,-1.000,En Pantalla,WCF-806,Verde
-13,6.317,-1.000,-1.000,-1.000,En Pantalla,FMM-582,Amarillo
-14,6.733,-1.000,-1.000,-1.000,Fuera de Pantalla,BGA-813,Azul
-15,8.267,-1.000,-1.000,-1.000,En Pantalla,RMP-069,Rojo
-16,8.317,-1.000,-1.000,-1.000,En Pantalla,OPN-506,Verde
-17,11.250,-1.000,-1.000,-1.000,Fuera de Pantalla,AIS-198,Rojo
-18,11.350,-1.000,-1.000,-1.000,En Pantalla,ISA-586,Verde
-19,12.550,-1.000,-1.000,-1.000,En Pantalla,IOI-038,Verde
+1,0.000,59.449,32.900,2.422,En Pantalla,FFW-695,Rojo
+2,0.000,52.983,58.383,3.980,En Pantalla,PCF-339,Rojo
+3,0.000,51.283,54.666,3.378,Fuera de Pantalla,RJX-307,Azul
+4,0.000,40.583,46.083,3.710,En Pantalla,FAH-364,Verde
+5,0.000,49.349,54.399,2.269,En Pantalla,FIJ-402,Verde
+6,0.000,46.783,52.116,3.284,En Pantalla,UTH-392,Azul
+7,0.000,54.783,42.366,2.489,En Pantalla,WWJ-849,Verde
+8,0.000,57.366,59.916,2.548,En Pantalla,GWW-160,Azul
+9,1.550,-1.000,-1.000,-1.000,Fuera de Pantalla,GIO-079,Azul
+10,3.083,-1.000,-1.000,-1.000,Fuera de Pantalla,GFM-029,Rojo
+11,3.650,-1.000,-1.000,-1.000,Fuera de Pantalla,BBO-983,Amarillo
+12,3.983,-1.000,-1.000,-1.000,Fuera de Pantalla,ASR-846,Amarillo
+13,4.683,-1.000,-1.000,-1.000,En Pantalla,POL-289,Rojo
+14,5.483,-1.000,-1.000,-1.000,Fuera de Pantalla,BOV-636,Rojo
+15,5.533,-1.000,-1.000,-1.000,En Pantalla,FBH-899,Amarillo
+16,5.550,-1.000,-1.000,-1.000,En Pantalla,RHF-888,Azul
+17,6.183,-1.000,-1.000,-1.000,Fuera de Pantalla,SIN-612,Amarillo
+18,8.033,-1.000,-1.000,-1.000,En Pantalla,WAO-028,Rojo
+19,8.300,-1.000,-1.000,-1.000,Fuera de Pantalla,WBP-671,Rojo
+20,8.633,-1.000,-1.000,-1.000,Fuera de Pantalla,QHK-908,Azul
+21,9.400,-1.000,-1.000,-1.000,Fuera de Pantalla,RMI-608,Azul
+22,10.667,-1.000,-1.000,-1.000,En Pantalla,WKW-068,Verde
+23,11.283,-1.000,-1.000,-1.000,En Pantalla,FDE-562,Azul
+24,11.500,-1.000,-1.000,-1.000,Fuera de Pantalla,BCN-885,Verde
+25,11.600,-1.000,-1.000,-1.000,En Pantalla,PQW-948,Verde
+26,14.433,-1.000,-1.000,-1.000,En Pantalla,JJW-499,Rojo
+27,15.517,-1.000,-1.000,-1.000,Fuera de Pantalla,ZZX-170,Rojo
+28,16.717,-1.000,-1.000,-1.000,En Pantalla,EAT-718,Verde
+29,16.800,-1.000,-1.000,-1.000,En Pantalla,SOB-126,Azul
+30,17.333,-1.000,-1.000,-1.000,Fuera de Pantalla,AJW-675,Azul
+31,17.633,-1.000,-1.000,-1.000,Fuera de Pantalla,PKA-167,Rojo
+32,19.467,-1.000,-1.000,-1.000,Fuera de Pantalla,SFZ-014,Amarillo
+33,22.100,-1.000,-1.000,-1.000,Fuera de Pantalla,UCQ-624,Rojo
+34,22.283,-1.000,-1.000,-1.000,Fuera de Pantalla,DEQ-140,Rojo
+35,22.333,-1.000,-1.000,-1.000,En Pantalla,XWB-415,Verde
+36,24.783,-1.000,-1.000,-1.000,En Pantalla,FLO-833,Rojo
+37,24.916,-1.000,-1.000,-1.000,En Pantalla,FCG-993,Azul
+38,26.983,-1.000,-1.000,-1.000,Fuera de Pantalla,DUH-198,Rojo
+39,30.200,-1.000,-1.000,-1.000,Fuera de Pantalla,HHS-586,Rojo
+40,30.916,-1.000,-1.000,-1.000,En Pantalla,HQI-402,Azul
+41,31.333,-1.000,-1.000,-1.000,Fuera de Pantalla,URY-912,Verde
+42,31.450,-1.000,-1.000,-1.000,Fuera de Pantalla,ZCJ-960,Azul
+43,32.000,-1.000,-1.000,-1.000,En Pantalla,NUY-517,Amarillo
+44,32.716,-1.000,-1.000,-1.000,En Pantalla,ORU-029,Amarillo
+45,32.883,-1.000,-1.000,-1.000,En Pantalla,BSY-373,Verde
+46,33.466,-1.000,-1.000,-1.000,En Pantalla,HWV-410,Amarillo
+47,36.083,-1.000,-1.000,-1.000,En Pantalla,XXP-659,Azul
+48,36.483,-1.000,-1.000,-1.000,En Pantalla,VPH-993,Azul
+49,37.016,-1.000,-1.000,-1.000,En Pantalla,ECV-412,Azul
+50,39.300,-1.000,-1.000,-1.000,Fuera de Pantalla,RCD-897,Azul
+51,39.766,-1.000,-1.000,-1.000,En Pantalla,MHD-173,Rojo
+52,39.933,-1.000,-1.000,-1.000,En Pantalla,NPD-364,Azul
+53,40.283,-1.000,-1.000,-1.000,Fuera de Pantalla,WWV-484,Amarillo
+54,41.016,-1.000,-1.000,-1.000,En Pantalla,BUQ-190,Rojo
+55,43.066,-1.000,-1.000,-1.000,Fuera de Pantalla,CCS-769,Verde
+56,44.233,-1.000,-1.000,-1.000,En Pantalla,HYG-443,Amarillo
+57,47.616,-1.000,-1.000,-1.000,En Pantalla,AVQ-395,Azul
+58,48.333,-1.000,-1.000,-1.000,Fuera de Pantalla,YBQ-293,Rojo
+59,48.516,-1.000,-1.000,-1.000,En Pantalla,TII-834,Azul
+60,50.183,-1.000,-1.000,-1.000,Fuera de Pantalla,NBO-286,Rojo
+61,52.116,-1.000,-1.000,-1.000,Fuera de Pantalla,ASV-665,Azul
+62,54.249,-1.000,-1.000,-1.000,En Pantalla,LST-762,Verde
+63,55.299,-1.000,-1.000,-1.000,Fuera de Pantalla,KMJ-537,Amarillo
+64,56.599,-1.000,-1.000,-1.000,En Pantalla,OPP-287,Rojo
+65,57.199,-1.000,-1.000,-1.000,En Pantalla,TRP-960,Verde
+66,58.516,-1.000,-1.000,-1.000,Fuera de Pantalla,JED-691,Rojo
+67,58.899,-1.000,-1.000,-1.000,Fuera de Pantalla,TIS-873,Azul
+68,59.416,-1.000,-1.000,-1.000,Fuera de Pantalla,CCW-055,Azul

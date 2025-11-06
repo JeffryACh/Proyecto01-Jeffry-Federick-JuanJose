@@ -6,7 +6,7 @@
 *   - Juan J. Rojas
 *
 * Created: 28/09/2025 15:40
-* Modified: 04/11/2025 20:35
+* Modified: 06/11/2025 18:00
 */
 
 #include <iostream>
@@ -14,9 +14,12 @@
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
-#include <memory>        
+#include <memory>
+#include <string>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_primitives.h>
 #include "Simulador.h"
 
 Simulador sim(5 , 0.6f );
@@ -29,17 +32,6 @@ using namespace std;
 const int SCREEN_W = 1200;
 const int SCREEN_H = 600;
 const float FPS = 60.0f;
-/*
-TO DO:-------------------------------------------------
-hay q hacer:
-
--Cambiar imagen fondo para que sea unidireccional(paint) (hecho)
--implementar colisiones (hecho)
--Poner peaje con logica (imagen) (hecho)
--carro verde (cambiar tamaño) (hecho)
--carro amarillo (cambiar tamaño) (hecho)
--Estadisticas visuales 
-*/
 
 /*
 * Dibuja el fondo escalado a la pantalla
@@ -51,12 +43,19 @@ hay q hacer:
 */
 void dibujarFondo(ALLEGRO_BITMAP* fondo) 
 {
-    al_draw_scaled_bitmap(
-        fondo,
-        0, 0, al_get_bitmap_width(fondo), al_get_bitmap_height(fondo),
-        0, 0, SCREEN_W, SCREEN_H,
-        0
-    );
+    if (fondo)
+    {
+        al_draw_scaled_bitmap(
+            fondo,
+            0, 0, al_get_bitmap_width(fondo), al_get_bitmap_height(fondo),
+            0, 0, SCREEN_W, SCREEN_H,
+            0
+        );
+    }
+    else
+    {
+        al_clear_to_color(al_map_rgb(50, 50, 50));
+    }
 }
 
 /*
@@ -93,7 +92,6 @@ bool hayCarroAdelante(const Carro& actual, const vector<shared_ptr<Carro>>& auto
             const Carro* otro = otroPtr.get();
             if (otro == &actual) continue;
 
-           
             if (fabs(actual.getPosicionY() - otro->getPosicionY()) > toleranciaCarril) continue;
 
             float dx = otro->getPosicionX() - actual.getPosicionX();
@@ -113,7 +111,6 @@ bool hayCarroAdelante(const Carro& actual, const vector<shared_ptr<Carro>>& auto
             const Carro* otro = otroPtr.get();
             if (otro == &actual) continue;
 
-           
             if (fabs(actual.getPosicionX() - otro->getPosicionX()) > toleranciaCarril) continue;
 
             float dy = otro->getPosicionY() - actual.getPosicionY();
@@ -269,6 +266,16 @@ int main()
         return 1;
     }
 
+    if (!al_install_mouse())
+    {
+        cerr << "No se pudo inicializar el mouse." << endl;
+        return 1;
+    }
+
+    // Inicializar addons para texto y primitivas (para dibujar el botón y campos)
+    al_init_font_addon();
+    al_init_primitives_addon();
+
     ALLEGRO_DISPLAY* ventana = al_create_display(SCREEN_W, SCREEN_H);
     if (!ventana) 
     {
@@ -282,8 +289,7 @@ int main()
     if (!fondo) 
     {
         cerr << "No se pudo cargar la imagen de fondo estres positivo" << endl;
-        al_destroy_display(ventana);
-        return 1;
+        // continuar sin fondo (se dibuja fondo sólido)
     }
 
     ALLEGRO_BITMAP* imgAmarillo = al_load_bitmap("carroAmarillo.png");
@@ -294,7 +300,11 @@ int main()
     if (!imgAmarillo || !imgRojo || !imgAzul || !imgVerde) 
     {
         cerr << "No se pudieron cargar las imágenes de los autos." << endl;
-        al_destroy_bitmap(fondo);
+        if (fondo) al_destroy_bitmap(fondo);
+        if (imgAmarillo) al_destroy_bitmap(imgAmarillo);
+        if (imgRojo) al_destroy_bitmap(imgRojo);
+        if (imgAzul) al_destroy_bitmap(imgAzul);
+        if (imgVerde) al_destroy_bitmap(imgVerde);
         al_destroy_display(ventana);
         return 1;
     }
@@ -304,8 +314,287 @@ int main()
     {
         cerr << "No se pudo cargar la imagen del peaje (Image 2 nov 2025, 12_15_24.png)." << endl;
         imgPeaje = nullptr;
-    }
+    }   
 
+    // --- PANTALLA DE INICIO con inputs y botón "empezar" ---
+    int serviceMin = 2;      // valor por defecto si el usuario no escribe nada
+    int serviceMax = 5;      // valor por defecto si el usuario no escribe nada
+    int simDurationMin = 5;  // valor por defecto (minutos)
+
+    {
+        ALLEGRO_EVENT_QUEUE* startQueue = al_create_event_queue();
+        if (!startQueue)
+        {
+            cerr << "No se pudo crear la cola de eventos (start screen)." << endl;
+            // continuar sin pantalla de inicio
+        }
+        else
+        {
+            al_register_event_source(startQueue, al_get_display_event_source(ventana));
+            al_register_event_source(startQueue, al_get_mouse_event_source());
+            al_register_event_source(startQueue, al_get_keyboard_event_source());
+
+            // fuente integrada (falla suave si no existe)
+            ALLEGRO_FONT* font = al_create_builtin_font();
+
+            bool startPressed = false;
+            bool redraw = true;
+            int mouseX = 0, mouseY = 0;
+
+            // botón
+            const int btnW = 220;
+            const int btnH = 72;
+            const int btnX = (SCREEN_W - btnW) / 2;
+            const int btnY = (SCREEN_H - btnH) / 2 + 120;
+
+            // inputs: dos para rango (min, max) y uno para duración en minutos
+            string bufMin;
+            string bufMax;
+            string bufDuration;
+            int focusedField = 0; // 0=min, 1=max, 2=duration, 3=botón
+
+            const int inputW = 120;
+            const int inputH = 36;
+            const int labelX = SCREEN_W / 2 - 290;
+            const int fieldX = SCREEN_W / 2 - 120;
+            const int startY = SCREEN_H / 2 - 80;
+            const int spacingY = 56;
+
+            // helper lambdas
+            auto isDigitOrSign = [](int c) -> bool {
+                return (c >= '0' && c <= '9') || c == '-' || c == '+';
+            };
+
+            while (!startPressed)
+            {
+                ALLEGRO_EVENT ev;
+                if (al_get_next_event(startQueue, &ev))
+                {
+                    if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+                    {
+                        // limpiar recursos y salir del programa
+                        al_destroy_font(font);
+                        al_destroy_event_queue(startQueue);
+                        if (fondo) al_destroy_bitmap(fondo);
+                        al_destroy_bitmap(imgAmarillo);
+                        al_destroy_bitmap(imgRojo);
+                        al_destroy_bitmap(imgAzul);
+                        al_destroy_bitmap(imgVerde);
+                        if (imgPeaje) al_destroy_bitmap(imgPeaje);
+                        al_destroy_display(ventana);
+                        return 0;
+                    }
+                    else if (ev.type == ALLEGRO_EVENT_MOUSE_AXES || ev.type == ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY)
+                    {
+                        mouseX = ev.mouse.x;
+                        mouseY = ev.mouse.y;
+                        redraw = true;
+                    }
+                    else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+                    {
+                        if (ev.mouse.button & 1) // izquierdo
+                        {
+                            mouseX = ev.mouse.x;
+                            mouseY = ev.mouse.y;
+                            // detectar click en inputs
+                            int fy = startY;
+                            if (mouseX >= fieldX && mouseX <= fieldX + inputW)
+                            {
+                                if (mouseY >= fy && mouseY <= fy + inputH) { focusedField = 0; }
+                                else if (mouseY >= fy + spacingY && mouseY <= fy + spacingY + inputH) { focusedField = 1; }
+                                else if (mouseY >= fy + spacingY * 2 && mouseY <= fy + spacingY * 2 + inputH) { focusedField = 2; }
+                                else if (mouseX >= btnX && mouseX <= btnX + btnW && mouseY >= btnY && mouseY <= btnY + btnH) { focusedField = 3; startPressed = true; }
+                            }
+                            else
+                            {
+                                // click en botón (si fuera)
+                                if (mouseX >= btnX && mouseX <= btnX + btnW && mouseY >= btnY && mouseY <= btnY + btnH)
+                                {
+                                    focusedField = 3;
+                                    startPressed = true;
+                                }
+                            }
+                            redraw = true;
+                        }
+                    }
+                    else if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
+                    {
+                        if (ev.keyboard.keycode == ALLEGRO_KEY_TAB)
+                        {
+                            focusedField = (focusedField + 1) % 4;
+                            redraw = true;
+                        }
+                        else if (ev.keyboard.keycode == ALLEGRO_KEY_ENTER)
+                        {
+                            // ENTER en campos confirma (si el foco está en botón o fuera)
+                            if (focusedField == 3) startPressed = true;
+                            else startPressed = true; // simplificamos: ENTER inicia
+                        }
+                        else if (ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE)
+                        {
+                            al_destroy_font(font);
+                            al_destroy_event_queue(startQueue);
+                            if (fondo) al_destroy_bitmap(fondo);
+                            al_destroy_bitmap(imgAmarillo);
+                            al_destroy_bitmap(imgRojo);
+                            al_destroy_bitmap(imgAzul);
+                            al_destroy_bitmap(imgVerde);
+                            if (imgPeaje) al_destroy_bitmap(imgPeaje);
+                            al_destroy_display(ventana);
+                            return 0;
+                        }
+                    }
+                    else if (ev.type == ALLEGRO_EVENT_KEY_CHAR)
+                    {
+                        // manejo de escritura en el campo enfocado
+                        int c = ev.keyboard.unichar;
+                        if (focusedField >= 0 && focusedField <= 2)
+                        {
+                            string* target = (focusedField == 0) ? &bufMin : (focusedField == 1) ? &bufMax : &bufDuration;
+                            if (c == 8) // backspace
+                            {
+                                if (!target->empty()) target->pop_back();
+                            }
+                            else if (c == 13 || c == 10) // enter
+                            {
+                                // nada especial aquí (enter inicia más arriba)
+                            }
+                            else if (isDigitOrSign(c))
+                            {
+                                target->push_back(static_cast<char>(c));
+                            }
+                            // ignorar otros caracteres
+                            redraw = true;
+                        }
+                    }
+                }
+
+                if (redraw && al_is_event_queue_empty(startQueue))
+                {
+                    redraw = false;
+                    // Dibujar pantalla de inicio con campos
+                    al_clear_to_color(al_map_rgb(0, 0, 0));
+                    
+
+                    // Título
+                    if (font)
+                        al_draw_text(font, al_map_rgb(255,255,255), SCREEN_W/2, SCREEN_H/2 - 180, ALLEGRO_ALIGN_CENTRE, "Simulador - Ajustes iniciales");
+
+                    // Labels y campos
+                    int y = startY;
+
+                    // Min servicio
+                    if (font) al_draw_text(font, al_map_rgb(220,220,220), labelX, y + 8, 0, "Rango servicio (min):");
+                    ALLEGRO_COLOR boxCol = (focusedField == 0) ? al_map_rgb(200,200,120) : al_map_rgb(80,80,80);
+                    al_draw_filled_rectangle((float)fieldX, (float)y, (float)(fieldX + inputW), (float)(y + inputH), boxCol);
+                    al_draw_rectangle((float)fieldX, (float)y, (float)(fieldX + inputW), (float)(y + inputH), al_map_rgb(255,255,255), 2.0f);
+                    if (font)
+                    {
+                        if (bufMin.empty())
+                            al_draw_text(font, al_map_rgb(160,160,160), fieldX + 8, y + 6, 0, "2");
+                        else
+                            al_draw_text(font, al_map_rgb(255,255,255), fieldX + 8, y + 6, 0, bufMin.c_str());
+                    }
+
+                    // Max servicio
+                    y += spacingY;
+                    if (font) al_draw_text(font, al_map_rgb(220,220,220), labelX, y + 8, 0, "Rango servicio (max):");
+                    boxCol = (focusedField == 1) ? al_map_rgb(200,200,120) : al_map_rgb(80,80,80);
+                    al_draw_filled_rectangle((float)fieldX, (float)y, (float)(fieldX + inputW), (float)(y + inputH), boxCol);
+                    al_draw_rectangle((float)fieldX, (float)y, (float)(fieldX + inputW), (float)(y + inputH), al_map_rgb(255,255,255), 2.0f);
+                    if (font)
+                    {
+                        if (bufMax.empty())
+                            al_draw_text(font, al_map_rgb(160,160,160), fieldX + 8, y + 6, 0, "5");
+                        else
+                            al_draw_text(font, al_map_rgb(255,255,255), fieldX + 8, y + 6, 0, bufMax.c_str());
+                    }
+
+                    // Duración en minutos
+                    y += spacingY;
+                    if (font) al_draw_text(font, al_map_rgb(220,220,220), labelX, y + 8, 0, "Duración (minutos):");
+                    boxCol = (focusedField == 2) ? al_map_rgb(200,200,120) : al_map_rgb(80,80,80);
+                    al_draw_filled_rectangle((float)fieldX, (float)y, (float)(fieldX + inputW), (float)(y + inputH), boxCol);
+                    al_draw_rectangle((float)fieldX, (float)y, (float)(fieldX + inputW), (float)(y + inputH), al_map_rgb(255,255,255), 2.0f);
+                    if (font)
+                    {
+                        if (bufDuration.empty())
+                            al_draw_text(font, al_map_rgb(160,160,160), fieldX + 8, y + 6, 0, "5");
+                        else
+                            al_draw_text(font, al_map_rgb(255,255,255), fieldX + 8, y + 6, 0, bufDuration.c_str());
+                    }
+
+                    // Botón empezar
+                    bool hover = (mouseX >= btnX && mouseX <= btnX + btnW && mouseY >= btnY && mouseY <= btnY + btnH);
+                    ALLEGRO_COLOR btnColor = hover ? al_map_rgb(70, 150, 70) : al_map_rgb(50, 120, 50);
+                    ALLEGRO_COLOR borde = al_map_rgb(255, 255, 255);
+                    al_draw_filled_rectangle((float)btnX, (float)btnY, (float)(btnX + btnW), (float)(btnY + btnH), btnColor);
+                    al_draw_rectangle((float)btnX, (float)btnY, (float)(btnX + btnW), (float)(btnY + btnH), borde, 3.0f);
+                    if (font)
+                    {
+                        int textH = al_get_font_line_height(font);
+                        al_draw_text(font, al_map_rgb(255,255,255), btnX + btnW / 2, btnY + (btnH - textH) / 2, ALLEGRO_ALIGN_CENTRE, "empezar");
+                    }
+
+                    // Nota de uso
+                    if (font)
+                        al_draw_text(font, al_map_rgb(200,200,200), SCREEN_W / 2, btnY + btnH + 20, ALLEGRO_ALIGN_CENTRE, "Deje el campo vacío para usar el valor por defecto");
+
+                    al_flip_display();
+                }
+            }
+
+            // Al confirmar: parsear buffers y aplicar valores por defecto en caso de error/vacío
+            auto parseOrDefault = [](const string& s, int def) -> int {
+                if (s.empty()) return def;
+                try {
+                    size_t idx = 0;
+                    int v = stoi(s, &idx);
+                    (void)idx;
+                    return v;
+                } catch (...) {
+                    return def;
+                }
+            };
+
+            int parsedMin = parseOrDefault(bufMin, 2);
+            int parsedMax = parseOrDefault(bufMax, 5);
+            int parsedDuration = parseOrDefault(bufDuration, 5);
+
+            // Validaciones sencillas: asegurar min <= max y valores positivos
+            if (parsedMin <= 0) parsedMin = 2;
+            if (parsedMax <= 0) parsedMax = 5;
+            if (parsedMin > parsedMax) swap(parsedMin, parsedMax);
+            if (parsedDuration <= 0) parsedDuration = 5;
+
+            serviceMin = parsedMin;
+            serviceMax = parsedMax;
+            simDurationMin = parsedDuration;
+
+            // Mostrar en consola (y más adelante puede pasarse a Simulador/CabinaPeaje)
+            cout << "Rango servicio seleccionado: [" << serviceMin << ", " << serviceMax << "]" << endl;
+            cout << "Duración simulación (minutos): " << simDurationMin << " (=" << (simDurationMin*60) << "s)" << endl;
+
+            // limpiar recursos de pantalla de inicio
+            al_destroy_font(font);
+            al_destroy_event_queue(startQueue);
+
+            // NOTA: en esta implementación sólo recogemos y validamos los valores.
+            // Para aplicar los tiempos al motor de simulación:
+            // - Si su clase `Simulador` ofrece métodos como `setTiempoServicioMinMax(int min,int max)`
+            //   o `setDuracionSimulacionSegundos(float segundos)` llámelos aquí después de asignar
+            //   `serviceMin`, `serviceMax` y `simDurationMin`.
+            // - También es posible reconstruir las `CabinaPeaje` con los nuevos parámetros si el diseño
+            //   actual lo permite.
+            //
+            // Ejemplo (si existen las funciones, descomentar y ajustar nombres):
+            // sim.setTiempoServicioRango(serviceMin, serviceMax);
+            // sim.setDuracionSimulacion(simDurationMin * 60.0f);
+        }
+    }
+    // --- FIN pantalla de inicio ---
+
+    // A partir de aquí sigue la creación de autos y ejecución de simulación
     vector<shared_ptr<Carro>> autos;
     srand(time(nullptr));
 
@@ -343,11 +632,11 @@ int main()
             a->setPosicion(carrilesX[rand() % 3], static_cast<float>(rand() % maxY));
         }
 
-		string placa = generarPlacaAleatoria();
+        string placa = generarPlacaAleatoria();
         while (exisePlaca(placa, autos))
-			placa = generarPlacaAleatoria();
+            placa = generarPlacaAleatoria();
 
-		a->setPlaca(placa);
+        a->setPlaca(placa);
 
         sim.agregarVehiculo(a);
         autos.push_back(a);
@@ -366,10 +655,13 @@ int main()
     bool dibujar = true;
     al_start_timer(timer);
 
-   
+
     const float distanciaMinima = 50.0f;
     const float toleranciaCarril = 12.0f;
     const float dt = 1.0f / FPS; 
+
+    // duración objetivo en segundos (establecida desde la pantalla de inicio)
+    const float duracionObjetivoSeg = static_cast<float>(simDurationMin) * 60.0f;
 
     while (!salir) 
     {
@@ -383,7 +675,15 @@ int main()
         else if (ev.type == ALLEGRO_EVENT_TIMER)
             dibujar = true;
 
+        // actualizar simulador (avanza tiempo interno)
         sim.actualizar(dt);
+
+        // --- NUEVO: terminar simulación cuando se alcance la duración predeterminada ---
+        if (sim.getTiempoSim() >= duracionObjetivoSeg)
+        {
+            cout << "Duración predeterminada alcanzada (" << duracionObjetivoSeg << "s). Finalizando simulación." << endl;
+            salir = true;
+        }
 
         for (auto& a : autos) 
         {
@@ -457,7 +757,7 @@ int main()
     sim.getEstadisticas().generarCSV("DatosGenerales.csv");
 
 
-    al_destroy_bitmap(fondo);
+    if (fondo) al_destroy_bitmap(fondo);
     al_destroy_bitmap(imgAmarillo);
     al_destroy_bitmap(imgRojo);
     al_destroy_bitmap(imgAzul);
