@@ -90,5 +90,6 @@
     <None Include="DatosGenerales.csv">
       <Filter>Archivos de recursos</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
