@@ -10,7 +10,8 @@ class Carro;
 
 #include "Carro.h"
 
-class CabinaPeaje {
+class CabinaPeaje
+{
 private:
     queue<shared_ptr<Carro>> cola;
     bool ocupada;

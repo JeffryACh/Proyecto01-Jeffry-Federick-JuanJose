@@ -4,7 +4,8 @@
 
 using namespace std;
 
-class Carril {
+class Carril
+{
 private:
     vector<Carro*> carrosEnCarril;
 

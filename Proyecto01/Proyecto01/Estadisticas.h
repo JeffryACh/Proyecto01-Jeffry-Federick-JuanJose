@@ -8,10 +8,11 @@
 
 using namespace std;
 
-class Estadisticas {
+class Estadisticas 
+{
 private:
 	vector<tuple<int, float, float, float, float>> registros; // id, tiempoGeneracion, tiempoLlegadaCola, tiempoInicioServicio, tiempoSalida
-	vector<tuple<string, bool, string>> datosVehiculos; // Datos de vehículos: placa, estado, color
+	vector<tuple<string, bool, string, int>> datosVehiculos; // Datos de vehículos: placa, estado, color, id
 
     float tiempoSimTotal; 
 public:

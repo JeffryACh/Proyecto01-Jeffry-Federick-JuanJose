@@ -1,21 +1,22 @@
-Placa,Estado,Color
-SWB-844,En Pantalla,Verde
-XCH-500,En Pantalla,Rojo
-WZN-157,Fuera de Pantalla,Amarillo
-GJZ-964,Fuera de Pantalla,Rojo
-TII-154,En Pantalla,Verde
-REA-770,Fuera de Pantalla,Rojo
-ZIY-402,Fuera de Pantalla,Azul
-CDA-206,Fuera de Pantalla,Amarillo
-,En Pantalla,Amarillo
-,En Pantalla,Amarillo
-,En Pantalla,Amarillo
-,En Pantalla,Amarillo
-,En Pantalla,Amarillo
-,En Pantalla,Amarillo
-,En Pantalla,Amarillo
-,En Pantalla,Amarillo
-,En Pantalla,Amarillo
-,En Pantalla,Amarillo
-,En Pantalla,Amarillo
-,En Pantalla,Amarillo
+Placa,Estado,Color,Id
+LBS-257,Fuera de Pantalla,Azul,1
+IMC-232,En Pantalla,Verde,2
+ZTM-122,En Pantalla,Amarillo,3
+SAA-681,En Pantalla,Azul,4
+HLR-672,En Pantalla,Rojo,5
+UMH-405,Fuera de Pantalla,Verde,6
+EPQ-309,Fuera de Pantalla,Azul,7
+DFC-484,Fuera de Pantalla,Azul,8
+,En Pantalla,Amarillo,9
+,En Pantalla,Amarillo,10
+,En Pantalla,Amarillo,11
+,En Pantalla,Amarillo,12
+,En Pantalla,Amarillo,13
+,En Pantalla,Amarillo,14
+,En Pantalla,Amarillo,15
+,En Pantalla,Amarillo,16
+,En Pantalla,Amarillo,17
+,En Pantalla,Amarillo,18
+,En Pantalla,Amarillo,19
+,En Pantalla,Amarillo,20
+,En Pantalla,Amarillo,21

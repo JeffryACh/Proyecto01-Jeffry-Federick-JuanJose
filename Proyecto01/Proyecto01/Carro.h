@@ -12,7 +12,8 @@ class CabinaPeaje;
 
 using namespace std;
 
-class Carro {
+class Carro 
+{
 private:
     bool orientacion; // false: horizontal, true: vertical
     bool estado;      // true: en pantalla, false: fuera de pantalla
@@ -89,6 +90,5 @@ public:
     void setImg(ALLEGRO_BITMAP* pImg);
 
     // Métodos
-    void decidirCabina();
     void avanzar(float pVelocidad, float pTiempo);
 };

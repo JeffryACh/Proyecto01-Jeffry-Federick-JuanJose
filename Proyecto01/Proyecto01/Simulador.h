@@ -8,7 +8,8 @@
 #include "CabinaPeaje.h"
 #include "Estadisticas.h"
 
-class Simulador {
+class Simulador 
+{
 private:
     vector<shared_ptr<Carro>> vehiculos; 
     vector<CabinaPeaje> cabinas;
