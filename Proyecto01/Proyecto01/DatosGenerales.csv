@@ -1,20 +1,12 @@
 ID,TiempoGenerado,TiempoLlegadaCola,TiempoSalida,TiempoServicio,Estado,Placa,Color
-1,0.000,2.100,4.400,2.285,Fuera de Pantalla,EMV-665,Rojo
-2,0.000,-1.000,-1.000,-1.000,Fuera de Pantalla,JPD-255,Azul
-3,0.000,9.450,13.667,4.200,En Pantalla,PIB-203,Azul
-4,0.000,11.733,-1.000,-1.000,En Pantalla,EDA-455,Amarillo
-5,0.000,-1.000,-1.000,-1.000,En Pantalla,MBE-067,Rojo
-6,0.000,-1.000,-1.000,-1.000,En Pantalla,SEM-425,Rojo
-7,0.000,-1.000,-1.000,-1.000,En Pantalla,YTH-596,Verde
-8,0.000,-1.000,-1.000,-1.000,En Pantalla,SDJ-321,Rojo
-9,1.150,-1.000,-1.000,-1.000,En Pantalla,UMX-474,Amarillo
-10,3.667,-1.000,-1.000,-1.000,En Pantalla,CPG-336,Azul
-11,3.983,-1.000,-1.000,-1.000,Fuera de Pantalla,HKB-368,Verde
-12,5.767,-1.000,-1.000,-1.000,En Pantalla,WCF-806,Verde
-13,6.317,-1.000,-1.000,-1.000,En Pantalla,FMM-582,Amarillo
-14,6.733,-1.000,-1.000,-1.000,Fuera de Pantalla,BGA-813,Azul
-15,8.267,-1.000,-1.000,-1.000,En Pantalla,RMP-069,Rojo
-16,8.317,-1.000,-1.000,-1.000,En Pantalla,OPN-506,Verde
-17,11.250,-1.000,-1.000,-1.000,Fuera de Pantalla,AIS-198,Rojo
-18,11.350,-1.000,-1.000,-1.000,En Pantalla,ISA-586,Verde
-19,12.550,-1.000,-1.000,-1.000,En Pantalla,IOI-038,Verde
+1,0.000,64.766,45.549,0.000,Fuera de Pantalla,IQY-571,Verde
+2,0.000,65.933,62.933,0.000,En Pantalla,WKN-294,Rojo
+3,0.000,53.449,60.583,0.000,En Pantalla,TXD-602,Rojo
+4,0.000,43.916,48.866,0.000,En Pantalla,XVD-499,Amarillo
+5,0.000,42.850,48.533,0.000,En Pantalla,CNW-645,Amarillo
+6,0.000,49.616,54.083,0.000,Fuera de Pantalla,VHD-090,Verde
+7,0.000,57.549,64.866,0.000,Fuera de Pantalla,AWT-019,Azul
+8,0.000,46.266,52.516,0.000,En Pantalla,ACI-366,Azul
+9,1.033,65.516,28.183,0.000,En Pantalla,UOX-362,Rojo
+10,1.933,49.166,56.666,0.000,Fuera de Pantalla,BWP-459,Azul
+11,2.100,61.633,30.333,0.000,Fuera de Pantalla,STV-673,Rojo

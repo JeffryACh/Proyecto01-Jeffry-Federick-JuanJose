@@ -34,8 +34,12 @@ static string generarPlacaUnica(const vector<shared_ptr<Carro>>& vehiculos)
     do {
         p = generarPlacaAleatoriaLocal();
         existe = false;
-        for (const auto& v : vehiculos) 
-            if (v && v->getPlaca() == p)  existe = true; break;
+        for (const auto& v : vehiculos) {
+            if (v && v->getPlaca() == p) {
+                existe = true;
+                break;
+            }
+        }
     } while (existe);
     return p;
 }
@@ -112,21 +116,25 @@ void Simulador::generarVehiculosAleatorios(float dt)
         c->setTiempoGenerado(tiempoSim);
         c->setTiempo(tiempoSim);
 
-        // Asignar atributos que antes quedaban por defecto
-        c->setColor(rand() % 4);             // color aleatorio
-        c->setEstado(rand() % 2 == 0 ? false : true); // estado aleatorio (puedes ajustar)
+        // Asignar atributos
+        c->setColor(rand() % 4);             
+        c->setEstado(rand() % 2 == 0 ? false : true);
         string placaUnica = generarPlacaUnica(vehiculos);
         c->setPlaca(placaUnica);
 
-        // Opcional: dimensiones / posición inicial si hace falta visualmente
-        // c->setDimension(...);
-        // c->setPosicion(...);
-
         vehiculos.push_back(c);
         estad.registrarGeneracion(c->getId(), tiempoSim, c->getPlaca(), c->getEstado(), obtenerColorCarro(c));
+
+        nuevosVehiculos.push_back(c);
     }
 }
 
+std::vector<std::shared_ptr<Carro>> Simulador::obtenerVehiculosGenerados()
+{
+    std::vector<std::shared_ptr<Carro>> salida;
+    salida.swap(nuevosVehiculos);
+    return salida;
+}
 
 /*
 * Método para procesar vehículos que han finalizado su servicio en el peaje

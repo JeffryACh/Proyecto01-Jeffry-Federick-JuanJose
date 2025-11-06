@@ -20,6 +20,8 @@ private:
     float tiempoZonaPeajeX; 
     float simSpeed; 
 
+    std::vector<std::shared_ptr<Carro>> nuevosVehiculos;
+
 public:
     Simulador(int numCabinas = 5, float pGen = 0.5f);
     ~Simulador();
@@ -31,8 +33,12 @@ public:
     int getNextId() { return nextId++; }
     void agregarVehiculo(shared_ptr<Carro> nuevo);
 
-
     const vector<CabinaPeaje>& getCabinas() const;
+
+    std::vector<std::shared_ptr<Carro>> obtenerVehiculosGenerados();
+
+    void setProbGeneracion(float p) { probGeneracionPorSegundo = p; }
+    float getProbGeneracion() const { return probGeneracionPorSegundo; }
 };
 
 string obtenerColorCarro(shared_ptr<Carro> nuevo);

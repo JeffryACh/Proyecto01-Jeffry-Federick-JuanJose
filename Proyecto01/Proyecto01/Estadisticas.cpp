@@ -194,3 +194,16 @@ float Estadisticas::tasaFlujoPromedio() const
     int procesados = totalProcesados();
     return minutos > 0.0f ? (static_cast<float>(procesados) / minutos) : 0.0f;
 }
+
+/*
+* Método para calcular el total de carros generados
+* Observación: Se cuenta el número total de registros, independientemente de si han sido procesados o no
+* @param:
+*   - Ninguno
+* @return:
+*   + int: Total de carros generados
+*/
+int Estadisticas::totalGenerados() const
+{
+    return static_cast<int>(registros.size());
+}
