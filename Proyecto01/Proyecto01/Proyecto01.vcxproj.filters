@@ -90,8 +90,5 @@
     <None Include="DatosGenerales.csv">
       <Filter>Archivos de recursos</Filter>
     </None>
-    <None Include="DatosVehiculos.csv">
-      <Filter>Archivos de recursos</Filter>
-    </None>
   </ItemGroup>
 </Project>

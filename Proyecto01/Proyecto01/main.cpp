@@ -454,7 +454,6 @@ int main()
             al_flip_display();
         }
     }
-	sim.getEstadisticas().generarDatosVehiculos("DatosVehiculos.csv");
     sim.getEstadisticas().generarCSV("DatosGenerales.csv");
 
 

@@ -16,8 +16,7 @@ Estadisticas::Estadisticas() : tiempoSimTotal(0.0f) {}
 */
 void Estadisticas::registrarGeneracion(int id, float tiempoGen, string placa, bool estado, string color)
 {
-    registros.emplace_back(id, tiempoGen, -1.0f, -1.0f, -1.0f);
-	datosVehiculos.emplace_back(placa, estado, color, id);
+    registros.emplace_back(id, tiempoGen, -1.0f, -1.0f, -1.0f, estado, placa, color);
 }
 
 /*
@@ -42,16 +41,6 @@ void Estadisticas::registrarLlegadaCola(int id, float tiempoLlegada, string plac
             break;
         }
     }
-    for (auto& d : datosVehiculos) 
-    {
-        if (get<0>(d) == placa) 
-        {
-            get<1>(d) = estado;
-            get<2>(d) = color;
-			get<3>(d) = id;
-            break;
-        }
-	}
 }
 
 /*
@@ -96,16 +85,6 @@ void Estadisticas::registrarSalida(int id, float tiempoSalida, float tiempoServi
             break;
         }
     }
-    for (auto& d : datosVehiculos)
-    {
-        if (get<0>(d) == placa)
-        {
-            get<1>(d) = estado;
-            get<2>(d) = color;
-			get<3>(d) = id;
-            break;
-        }
-    }
 }
 
 /*
@@ -119,7 +98,7 @@ void Estadisticas::registrarSalida(int id, float tiempoSalida, float tiempoServi
 void Estadisticas::generarCSV(const string& nombreArchivo) 
 {
     ofstream ofs(nombreArchivo);
-    ofs << "ID,TiempoGenerado,TiempoLlegadaCola,TiempoSalida,TiempoServicio\n";
+	ofs << "ID,TiempoGenerado,TiempoLlegadaCola,TiempoSalida,TiempoServicio,Estado,Placa,Color\n";
     ofs << fixed << setprecision(3);
     for (auto& r : registros)
     {
@@ -127,30 +106,11 @@ void Estadisticas::generarCSV(const string& nombreArchivo)
             << get<1>(r) << ","
             << get<2>(r) << ","
             << get<3>(r) << ","
-            << get<4>(r) << "\n";
-    }
-    ofs.close();
-}
+            << get<4>(r) << ","
+			<< (get<5>(r) ? "En Pantalla" : "Fuera de Pantalla") << ","
+            << get<6>(r) << ","
+			<< get<7>(r) << "\n";
 
-/*
-* Método para generar un archivo CSV con los datos de los vehículos
-* Observación: El archivo CSV contendrá columnas como placa, estado y color del vehículo
-* @param:
-*   - const string& pNombreArchivo: Nombre del archivo CSV a generar
-* @return:
-*   + Ninguno
-*/
-void Estadisticas::generarDatosVehiculos(const string& nombreArchivo) 
-{
-    ofstream ofs(nombreArchivo);
-    ofs << "Placa,Estado,Color,Id\n";
-	ofs << fixed << setprecision(3);
-    for (auto& d : datosVehiculos) 
-    {
-        ofs << get<0>(d) << ","
-            << (get<1>(d) ? "En Pantalla" : "Fuera de Pantalla") << ","
-            << get<2>(d) << ","
-			<< get<3>(d) << "\n";
     }
     ofs.close();
 }
