@@ -1,6 +1,46 @@
 #include "Simulador.h"
 
 /*
+* Método para generar una placa aleatoria local
+* Observación: La placa tiene el formato 3 letras '-' 3 números
+* @param:
+*   - Ninguno
+* @return:
+*   + string: Placa generada aleatoriamente
+*/
+static string generarPlacaAleatoriaLocal()
+{
+    string letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    string numeros = "0123456789";
+    string placa;
+    for (int i = 0; i < 3; ++i) placa += letras[rand() % letras.size()];
+    placa += '-';
+    for (int i = 0; i < 3; ++i) placa += numeros[rand() % numeros.size()];
+    return placa;
+}
+
+/*
+* Método para generar una placa única
+* Observación: Genera una placa que no existe en el vector de vehículos dado
+* @param:
+*   - const vector<shared_ptr<Carro>>& vehiculos: Vector de vehículos para verificar unicidad
+* @return:
+*   + string: Placa única generada
+*/
+static string generarPlacaUnica(const vector<shared_ptr<Carro>>& vehiculos)
+{
+    string p;
+    bool existe = false;
+    do {
+        p = generarPlacaAleatoriaLocal();
+        existe = false;
+        for (const auto& v : vehiculos) 
+            if (v && v->getPlaca() == p)  existe = true; break;
+    } while (existe);
+    return p;
+}
+
+/*
 * Constructor de la clase Simulador
 * Observación: Inicializa el simulador con un número dado de cabinas y una probabilidad de generación de vehículos por segundo
 * @param:
@@ -17,9 +57,7 @@ Simulador::Simulador(int numCabinas, float pGen)
     float baseY = 150.0f;
     float spacing = 60.0f;
     for (int i = 0; i < numCabinas; ++i)
-    {
         cabinas.emplace_back(2.0f, 5.0f, baseX + i * 60.0f, baseY + i * 0.0f, 36.0f);
-    }
 }
 
 /*
@@ -52,6 +90,8 @@ void Simulador::agregarVehiculo(shared_ptr<Carro> nuevo)
     }
 }
 
+
+
 /*
 * Método para generar vehículos aleatorios en el simulador
 * Observación: Genera vehículos basados en una probabilidad por segundo y los agrega al simulador
@@ -64,16 +104,29 @@ void Simulador::generarVehiculosAleatorios(float dt)
 {
     float pTick = 1.0f - powf(1.0f - probGeneracionPorSegundo, dt);
     float r = static_cast<float>(rand()) / RAND_MAX;
-    if (r < pTick) 
+    if (r < pTick)
     {
         auto c = make_shared<Carro>();
+        // asignar id y tiempos
         c->setId(nextId++);
         c->setTiempoGenerado(tiempoSim);
-        c->setTiempo(tiempoSim); 
+        c->setTiempo(tiempoSim);
+
+        // Asignar atributos que antes quedaban por defecto
+        c->setColor(rand() % 4);             // color aleatorio
+        c->setEstado(rand() % 2 == 0 ? false : true); // estado aleatorio (puedes ajustar)
+        string placaUnica = generarPlacaUnica(vehiculos);
+        c->setPlaca(placaUnica);
+
+        // Opcional: dimensiones / posición inicial si hace falta visualmente
+        // c->setDimension(...);
+        // c->setPosicion(...);
+
         vehiculos.push_back(c);
         estad.registrarGeneracion(c->getId(), tiempoSim, c->getPlaca(), c->getEstado(), obtenerColorCarro(c));
     }
 }
+
 
 /*
 * Método para procesar vehículos que han finalizado su servicio en el peaje
@@ -83,13 +136,13 @@ void Simulador::generarVehiculosAleatorios(float dt)
 * @return:
 *   + Ninguno
 */
-void Simulador::procesarFinalizados(float dt) 
+void Simulador::procesarFinalizados(float dt)
 {
-    for (auto v : vehiculos) 
+    for (auto v : vehiculos)
     {
-        if (v->getCabinaAsignada() != nullptr) 
+        if (v->getCabinaAsignada() != nullptr)
         {
-            if (v->getWaitTimer() <= 0.0f && v->getTiempoServicioAsignado() > 0.0f) 
+            if (v->getWaitTimer() <= 0.0f && v->getTiempoServicioAsignado() > 0.0f)
             {
                 v->setTiempoSalida(tiempoSim);
                 estad.registrarSalida(v->getId(), tiempoSim, v->getTiempoServicioAsignado(), v->getPlaca(), v->getEstado(), obtenerColorCarro(v));
@@ -97,13 +150,10 @@ void Simulador::procesarFinalizados(float dt)
                 v->setTiempoServicioAsignado(0.0f);
                 v->setPeajeCooldown(3.0f);
                 const float escapeDist = 48.0f;
-                if (!v->getEstado()) 
-                {
+                if (!v->getEstado())
                     v->setPosicion(tiempoZonaPeajeX - escapeDist, v->getPosicionY());
-                } else
-                {
+                else
                     v->setPosicion(v->getPosicionX(), v->getPosicionY() + escapeDist);
-                }
             }
         }
     }
@@ -123,9 +173,7 @@ void Simulador::actualizar(float dt)
     generarVehiculosAleatorios(dt);
 
     for (auto& cab : cabinas) 
-    {
         cab.actualizar(dt, tiempoSim, estad);
-    }
 
     for (auto v : vehiculos) 
     {

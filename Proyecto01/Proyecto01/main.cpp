@@ -243,9 +243,7 @@ bool exisePlaca(const string& placa, const vector<shared_ptr<Carro>>& autos)
     for (const auto& a : autos)
     {
         if (a->getPlaca() == placa)
-        {
             return true;
-        }
     }
     return false;
 }
@@ -348,12 +346,11 @@ int main()
 		string placa = generarPlacaAleatoria();
         while (exisePlaca(placa, autos))
 			placa = generarPlacaAleatoria();
-		
 
 		a->setPlaca(placa);
 
-        autos.push_back(a);
         sim.agregarVehiculo(a);
+        autos.push_back(a);
     }
 
     resolverSolapamientos(autos);
