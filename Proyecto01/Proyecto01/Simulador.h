@@ -8,6 +8,8 @@
 #include "CabinaPeaje.h"
 #include "Estadisticas.h"
 
+using namespace std;
+
 class Simulador 
 {
 private:
@@ -20,7 +22,7 @@ private:
     float tiempoZonaPeajeX; 
     float simSpeed; 
 
-    std::vector<std::shared_ptr<Carro>> nuevosVehiculos;
+    vector<shared_ptr<Carro>> nuevosVehiculos;
 
 public:
     Simulador(int numCabinas = 5, float pGen = 0.5f);
@@ -35,7 +37,7 @@ public:
 
     const vector<CabinaPeaje>& getCabinas() const;
 
-    std::vector<std::shared_ptr<Carro>> obtenerVehiculosGenerados();
+    vector<shared_ptr<Carro>> obtenerVehiculosGenerados();
 
     void setProbGeneracion(float p) { probGeneracionPorSegundo = p; }
     float getProbGeneracion() const { return probGeneracionPorSegundo; }

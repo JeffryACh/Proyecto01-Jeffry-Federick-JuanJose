@@ -14,20 +14,26 @@ CabinaPeaje::CabinaPeaje(float pMin, float pMax, float px, float py, float pSpac
 * Metodo para reposicionar los carros en la cola de la cabina de peaje
 * Observacion: Recalcula las posiciones de los carros en la cola basandose en su orden
 */
-void CabinaPeaje::reposicionarCola() {
+void CabinaPeaje::reposicionarCola()
+{
     vector<shared_ptr<Carro>> temp;
-    while (!cola.empty()) {
+    while (!cola.empty()) 
+    {
         temp.push_back(cola.front());
         cola.pop();
     }
-    for (size_t i = 0; i < temp.size(); ++i) {
+    for (size_t i = 0; i < temp.size(); ++i) 
+    {
         auto& carro = temp[i];
         if (!carro) continue;
-        if (!carro->getEstado()) {
+        if (!carro->getEstado()) 
+        {
             float x = posX - static_cast<float>(i + 1) * spacing;
             float y = carro->getPosicionY();
             carro->setPosicion(x, y);
-        } else {
+        } 
+        else 
+        {
             float x = carro->getPosicionX();
             float y = posY - static_cast<float>(i + 1) * spacing;
             carro->setPosicion(x, y);
@@ -39,6 +45,8 @@ void CabinaPeaje::reposicionarCola() {
 /*
 * Metodo para encolar un carro en la cabina de peaje
 * Observacion: Asigna la cabina al carro y lo anade a la cola
+* @param:
+*   - shared_ptr<Carro> carro: Puntero compartido al carro a encolar
 */
 void CabinaPeaje::encolar(shared_ptr<Carro> carro)
 {
@@ -52,6 +60,8 @@ void CabinaPeaje::encolar(shared_ptr<Carro> carro)
 /*
 * Metodo para obtener el tamano de la cola de la cabina de peaje
 * Observacion: Retorna el numero de carros en la cola
+* @return:
+*   + int: Tamaño de la cola
 */
 int CabinaPeaje::colaSize() const
 {
@@ -61,6 +71,8 @@ int CabinaPeaje::colaSize() const
 /*
 * Metodo para verificar si la cabina de peaje esta ocupada
 * Observacion: Retorna el estado de ocupacion de la cabina
+* @return:
+*   + bool: true si la cabina esta ocupada, false en caso contrario
 */
 bool CabinaPeaje::estaOcupada() const 
 {
@@ -70,6 +82,11 @@ bool CabinaPeaje::estaOcupada() const
 /*
 * Metodo para iniciar el servicio de un carro en la cabina de peaje
 * Observacion: Configura el servicio del carro y actualiza las estadisticas
+* @param:
+*   - shared_ptr<Carro> carro: Puntero compartido al carro a atender
+*   - float servicioAsignado: Tiempo de servicio asignado al carro
+*   - float tiempoSim: Tiempo actual de la simulacion
+*   - Estadisticas& estad: Referencia a las estadisticas de la simulacion
 */
 void CabinaPeaje::iniciarServicio(shared_ptr<Carro> carro, float servicioAsignado, float tiempoSim, Estadisticas& estad) 
 {
@@ -92,6 +109,10 @@ void CabinaPeaje::iniciarServicio(shared_ptr<Carro> carro, float servicioAsignad
 * Metodo para actualizar el estado de la cabina de peaje
 * Observacion: Actualiza el tiempo de servicio y maneja la cola de carros
 * Ahora: cuando termina el servicio se registra la salida inmediatamente en Estadisticas
+* @param:
+*   - float dt: Delta time desde la ultima actualizacion
+*   - float tiempoSim: Tiempo actual de la simulacion
+*   - Estadisticas& estad: Referencia a las estadisticas de la simulacion
 */
 void CabinaPeaje::actualizar(float dt, float tiempoSim, Estadisticas& estad) 
 {
@@ -102,7 +123,8 @@ void CabinaPeaje::actualizar(float dt, float tiempoSim, Estadisticas& estad)
         tiempoTotalOcupada += reduccion;
         if (tiempoRestanteServicio <= 0.0f) 
         {
-            if (enServicio) {
+            if (enServicio) 
+            {
                 enServicio->setTiempoSalida(tiempoSim);
                 estad.registrarSalida(enServicio->getId(), tiempoSim, enServicio->getTiempoServicioAsignado(), enServicio->getPlaca(), enServicio->getEstado(), obtenerColorCarro(enServicio));
                 enServicio->setCabinaAsignada(nullptr);

@@ -1,9 +1,13 @@
 ID,TiempoGenerado,TiempoLlegadaCola,TiempoSalida,TiempoServicio,Estado,Placa,Color
-1,0.000,-1.000,-1.000,-1.000,En Pantalla,CYY-352,Verde
-2,0.000,-1.000,-1.000,-1.000,En Pantalla,UGF-097,Rojo
-3,0.000,-1.000,-1.000,-1.000,En Pantalla,JZZ-178,Rojo
-4,0.000,-1.000,-1.000,-1.000,En Pantalla,JZC-658,Amarillo
-5,0.000,-1.000,-1.000,-1.000,En Pantalla,RHV-362,Rojo
-6,0.000,1.800,-1.000,-1.000,Fuera de Pantalla,IJO-217,Rojo
-7,0.000,-1.000,-1.000,-1.000,En Pantalla,UZS-360,Amarillo
-8,0.000,-1.000,-1.000,-1.000,En Pantalla,YFD-921,Verde
+1,0.000,68.634,73.368,0.000,En Pantalla,TTY-437,Verde
+2,0.000,91.505,97.073,0.000,En Pantalla,JYI-063,Amarillo
+3,0.000,74.668,80.053,0.000,Fuera de Pantalla,JEU-682,Rojo
+4,0.000,89.171,92.705,0.000,Fuera de Pantalla,KUQ-950,Azul
+5,0.000,101.957,69.267,0.000,Fuera de Pantalla,BRS-907,Verde
+6,0.000,84.504,90.422,0.000,En Pantalla,YON-027,Amarillo
+7,0.000,100.957,83.637,0.000,Fuera de Pantalla,ZWJ-476,Azul
+8,0.000,97.790,58.583,0.000,En Pantalla,OFP-168,Rojo
+9,0.217,93.222,100.840,0.000,En Pantalla,UAC-424,Amarillo
+10,1.167,81.103,87.871,0.000,Fuera de Pantalla,GKH-016,Amarillo
+11,1.500,63.949,70.284,0.000,En Pantalla,AVB-727,Amarillo
+12,3.317,102.124,99.123,0.000,Fuera de Pantalla,FYU-006,Amarillo

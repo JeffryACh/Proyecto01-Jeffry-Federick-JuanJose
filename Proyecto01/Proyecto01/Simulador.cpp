@@ -34,8 +34,10 @@ static string generarPlacaUnica(const vector<shared_ptr<Carro>>& vehiculos)
     do {
         p = generarPlacaAleatoriaLocal();
         existe = false;
-        for (const auto& v : vehiculos) {
-            if (v && v->getPlaca() == p) {
+        for (const auto& v : vehiculos) 
+        {
+            if (v && v->getPlaca() == p) 
+            {
                 existe = true;
                 break;
             }
@@ -129,9 +131,17 @@ void Simulador::generarVehiculosAleatorios(float dt)
     }
 }
 
-std::vector<std::shared_ptr<Carro>> Simulador::obtenerVehiculosGenerados()
+/*
+* Método para obtener los vehículos generados recientemente
+* Observación: Devuelve un vector de punteros compartidos a los vehículos generados desde la última llamada
+* @param:
+*   - Ninguno
+* @return:
+*   + vector<shared_ptr<Carro>>: Vector de punteros compartidos a los vehículos generados
+*/
+vector<shared_ptr<Carro>> Simulador::obtenerVehiculosGenerados()
 {
-    std::vector<std::shared_ptr<Carro>> salida;
+    vector<shared_ptr<Carro>> salida;
     salida.swap(nuevosVehiculos);
     return salida;
 }

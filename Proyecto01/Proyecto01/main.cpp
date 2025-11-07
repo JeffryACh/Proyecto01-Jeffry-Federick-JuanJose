@@ -6,7 +6,7 @@
 *   - Juan J. Rojas
 *
 * Created: 28/09/2025 15:40
-* Modified: 06/11/2025 18:00
+* Modified: 06/11/2025 18:10
 */
 
 #include <iostream>
@@ -333,7 +333,7 @@ void dibujarPanelEstadisticas(Simulador& simulador, ALLEGRO_FONT* font)
     float sistemaProm = est.tiempoPromedioSistema();
     float tasa = est.tasaFlujoPromedio();
 
-    std::ostringstream ss;
+    ostringstream ss;
 
     float leftCenterX = leftX + kpiMargin + kpiW * 0.5f;
     float rightCenterX = leftX + kpiMargin*2 + kpiW + kpiW * 0.5f;
@@ -358,7 +358,7 @@ void dibujarPanelEstadisticas(Simulador& simulador, ALLEGRO_FONT* font)
                  ss.str().c_str());
 
     ss.str(""); ss.clear();
-    ss << std::fixed << std::setprecision(2) << tasa;
+    ss << fixed << setprecision(2) << tasa;
     al_draw_text(font, al_map_rgb(120,80,20),
                  rightCenterX, bigY, ALLEGRO_ALIGN_CENTRE,
                  ss.str().c_str());
@@ -390,10 +390,11 @@ void dibujarPanelEstadisticas(Simulador& simulador, ALLEGRO_FONT* font)
     float utilProm = cabinas.empty() ? 0.0f : (totalUtil / static_cast<float>(cabinas.size()));
     ss << "Utilizacion promedio cabinas: " << (utilProm * 100.0f) << " %\n";
 
-    std::istringstream lin(ss.str());
+    istringstream lin(ss.str());
     string line;
     int ly = rightY + 12;
-    while (std::getline(lin, line)) {
+    while (getline(lin, line)) 
+    {
         al_draw_text(font, al_map_rgb(40,40,40), rightX + 10, ly, 0, line.c_str());
         ly += al_get_font_line_height(font) + 4;
     }
@@ -598,14 +599,10 @@ int main()
                         if (focusedField >= 0 && focusedField <= 2)
                         {
                             string* target = (focusedField == 0) ? &bufMin : (focusedField == 1) ? &bufMax : &bufDuration;
-                            if (c == 8) // backspace
-                            {
+                            if (c == 8)
                                 if (!target->empty()) target->pop_back();
-                            }
                             else if (isDigitOrSign(c))
-                            {
                                 target->push_back(static_cast<char>(c));
-                            }
                             redraw = true;
                         }
                     }
@@ -684,7 +681,9 @@ int main()
                     int v = stoi(s, &idx);
                     (void)idx;
                     return v;
-                } catch (...) {
+                }
+                catch (...)
+                {
                     return def;
                 }
             };
@@ -744,14 +743,14 @@ int main()
         if (horizontal)
         {
             a->setDimension(60.0f, 30.0f);
-            int maxX = max(50, SCREEN_W - 400);
-            a->setPosicion(static_cast<float>(rand() % maxX), carrilesY[rand() % 3]);
+            // Start from left edge
+            a->setPosicion(-100.0f, carrilesY[rand() % 3]);
         }
         else
         {
             a->setDimension(30.0f, 60.0f);
-            int maxY = max(50, SCREEN_H - 200);
-            a->setPosicion(carrilesX[rand() % 3], static_cast<float>(rand() % maxY));
+            // Start from top edge
+            a->setPosicion(carrilesX[rand() % 3], -60.0f);
         }
 
         string placa = generarPlacaAleatoria();
@@ -830,8 +829,10 @@ int main()
 
             // recoger vehículos generados por el simulador este tick
             auto generados = sim.obtenerVehiculosGenerados();
-            for (auto& c : generados) {
-                switch (c->getColor()) {
+            for (auto& c : generados) 
+            {
+                switch (c->getColor()) 
+                {
                 case 0: c->setImg(imgAmarillo); break;
                 case 1: c->setImg(imgRojo); break;
                 case 2: c->setImg(imgAzul); break;
@@ -842,14 +843,17 @@ int main()
                 bool horizontal = rand() % 2;
                 c->setEstado(!horizontal);
                 c->setVelocidad(2 + rand() % 3);
-                if (horizontal) {
+                if (horizontal) 
+                {
                     c->setDimension(60.0f, 30.0f);
-                    int maxX = max(50, SCREEN_W - 400);
-                    c->setPosicion(static_cast<float>(rand() % maxX), carrilesY[rand() % 3]);
-                } else {
+                    // Start from left edge
+                    c->setPosicion(-100.0f, carrilesY[rand() % 3]);
+                } 
+                else
+                {
                     c->setDimension(30.0f, 60.0f);
-                    int maxY = max(50, SCREEN_H - 200);
-                    c->setPosicion(carrilesX[rand() % 3], static_cast<float>(rand() % maxY));
+                    // Start from top edge
+                    c->setPosicion(carrilesX[rand() % 3], -60.0f);
                 }
 
                 autos.push_back(c);
@@ -891,7 +895,8 @@ int main()
         if (dibujar && al_is_event_queue_empty(queue))
         {
             dibujar = false;
-            if (!mostrarStats) {
+            if (!mostrarStats) 
+            {
                 al_clear_to_color(al_map_rgb(0, 0, 0));
                 dibujarFondo(fondo);
                 dibujarAutos(autos);
@@ -927,7 +932,9 @@ int main()
                              "Presione G para detener la creacion de vehiculos.");
                 al_draw_text(font, al_map_rgb(60,60,60), 12, SCREEN_H - 24, 0,
                              "Presione ESC para finalizar la simulacion y ver el apartado de estadisticas");
-            } else {
+            } 
+            else 
+            {
                 // generar CSV y mostrar panel de estadísticas
                 sim.getEstadisticas().generarCSV("DatosGenerales.csv");
                 dibujarPanelEstadisticas(sim, font);

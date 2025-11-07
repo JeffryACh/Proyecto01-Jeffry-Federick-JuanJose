@@ -183,11 +183,10 @@ void Carro::setImg(ALLEGRO_BITMAP* pImg)
 */
 void Carro::avanzar(float pVelocidad, float pTiempo)
 {
-    if (!orientacion) { // Movimiento horizontal
+    if (!orientacion)  // Movimiento horizontal
         posicionX += pVelocidad * pTiempo;
-    } else { // Movimiento vertical
+     else  // Movimiento vertical
         posicionY += pVelocidad * pTiempo;
-    }
 }
 
 
